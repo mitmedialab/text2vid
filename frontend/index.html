@@ -1,0 +1,205 @@
+<html lang="en"><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+  <meta property="og:image" content="images/intro.jpeg">
+  <title>Text2Vid</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.6.7.min.js"></script>
+  <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-text-geometry-component@0.5.1/dist/aframe-text-geometry-component.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+  
+</head>
+
+<body style="background-color: rgb(224, 224, 224); zoom: 1;">
+<div class="navbar-fixed">
+  <nav class="black lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Text2Vid</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#demo">Demo</a></li>
+      </ul>
+</div></nav></div>
+  
+  <div class="section no-pad-bot" id="index-banner">
+  
+  	
+  
+  
+    
+	
+	
+<div class="container">
+
+      <div id="demo" style="padding-bottom: 50px;"></div>
+      <div class="row center">
+        <div class="card">
+   				<div class="card-content">
+      			<div class="input-field col s12">
+         		 <i class="material-icons prefix">mode_edit</i>
+         		 <textarea id="databox" class="materialize-textarea" style="height: 45px;">Once upon a time.. there is a chicken</textarea>
+         		 <!--<label for="icon_prefix" class="">VR Story Tellers</label>-->
+        		</div><a href="#demo" id="upload-button" class="btn-large waves-effect black lighten-1"><div id="upload_status">Visualize Story</div></a>
+        		 
+        		 <a href="#" id="clear-object" class="btn-large waves-effect black lighten-1">Clear Object</a>
+        		 <a href="#" id="add-object" class="btn-large waves-effect black lighten-1">Add Object</a>
+        		 <a href="#" id="add-animation" class="btn-large waves-effect black lighten-1">Add Animation</a>
+        		 
+        		 
+        		<span class="card-title activator grey-text text-darken-4">
+      			</span></div>
+    			
+    			<div class="progress" id="progress" style="display: none;">
+      				<div class="indeterminate"></div>
+  				</div>
+ 		 </div>
+ 		 
+ 		 
+ 		   <!-- Aframe  -->
+ 		 <div style = "height: 500px;">
+ 		 	<!-- Assets  -->
+ 		 
+ 		 	<a-scene class="aframebox" embedded>
+ 		 	<a-assets>
+    			<a-asset-item id="bird-fly" src="GLTF/bird/Animations/Chick_Fly.gltf"></a-asset-item>
+    			<a-asset-item id="bird-peck" src="GLTF/bird/Animations/Chick_Peck.gltf"></a-asset-item>
+  			</a-assets>
+  			
+  		
+ 		 	<a-entity rotation="90 0 0" gltf-model="#bird-peck" animation-mixer \>
+				<a-animation attribute='position' to='.05 1 1' direction='alternate' dur='1000' repeat='indefinite' easing='linear'></a-animation>
+ 		 	</a-entity>
+ 		 	
+ 		 	
+			<!--ground--!>
+			<a-plane rotation="-90 0 0" width="10" height="4" color="#7BC8A4"></a-plane>
+			<a-sky id="sky_object" rotation="0 -90 0" src="https://www.sortiraparis.com/images/80/83517/577986-visuel-paris-velo-quai-2.jpg"></a-sky>
+			
+			
+			<!--camera--!>
+			<a-entity position="0 0 3.8">
+				<a-camera></a-camera>
+    		</a-entity>
+			</a-scene>
+ 	
+ 	
+    	</div>
+  
+
+
+<!--  Scripts-->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="js/materialize.js"></script>
+<script src="js/init.js"></script>
+<script>
+	$("#progress").hide();	
+	var upload_button = document.getElementById('upload-button');
+	var clear_button = document.getElementById('clear-object');
+	var add_button = document.getElementById('add-object');
+	var add_animation_button = document.getElementById('add-animation');
+	var input_text;
+	
+	upload_button.addEventListener('click', function() {
+		input_text = document.getElementById('databox');
+		document.getElementById("upload_status").innerHTML = "Magic is happening";
+		$("#progress").show();
+		console.log(input_text.value);	
+	});
+	
+	clear_button.addEventListener('click', function() {
+		remove_object();
+		console.log("clear");	
+	});
+	
+	add_button.addEventListener('click', function() {
+		add_entity();
+		find_background();
+		console.log("add object");	
+	});
+	
+	add_animation_button.addEventListener('click', function() {
+		add_animation();
+		console.log("add animation");	
+	});
+
+
+  	var sceneEl = document.querySelector('a-scene');
+
+	function add_entity()
+		{
+		
+		var newEl = document.createElement('a-entity');
+    	newEl.setAttribute('gltf-model', '#bird-fly');
+    	sceneEl.appendChild(newEl);
+		var x = Math.random()*7 - 3;
+    	var position = String (x) + "0 0";
+      	newEl.setAttribute('position', position);
+    	newEl.setAttribute('id', 'birdy');
+		newEl.setAttribute('rotation', '90 0 0');
+      	newEl.setAttribute('animation-mixer', '');
+		}
+	
+
+	function remove_object()
+		{
+        previousObject = document.querySelector("#birdy");
+        previousObject.parentNode.removeChild(previousObject);
+    
+		}
+	function add_animation()
+		{
+        previousObject = document.querySelector
+        ("#birdy");
+        var x = Math.random()*7 - 3;
+    	var position = String (x) + "0 0";
+      	//previousObject.setAttribute('rotation', position);
+      	var a = document.createElement("a-animation");
+      	a.setAttribute('attribute','position');
+      	a.setAttribute('to', '.05 1 1');
+      	a.setAttribute('direction', 'alternate');
+      	a.setAttribute('dur', '1000');
+      	a.setAttribute('repeat', 'indefinite');
+      	a.setAttribute('easing', 'linear');
+    	previousObject.append(a);
+    	
+    
+		}
+		
+	function find_background()
+		{
+		 var keyword = "forest";
+
+				$(document).ready(function(){
+
+					$.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?",
+					{
+						tags: keyword,
+						tagmode: "any",
+						format: "json"
+					},
+					function(data) {
+						var rnd = Math.floor(Math.random() * data.items.length);
+
+						var image_src = data.items[rnd]['media']['m'].replace("_m", "_b");
+						console.log(image_src);
+						sky = document.querySelector("#sky_object");
+						sky.setAttribute('src', image_src);
+						 
+
+						 });
+
+						 });
+		}
+		find_background();
+  		
+</script>
+	
+	
+  
+
+<div class="hiddendiv common" style="font-size: 30px; font-family: Roboto, sans-serif; line-height: 45px; width: 947px;">Once upon a time...<br></div><div class="drag-target" style="left: 0px; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+</div></div></body></html>
