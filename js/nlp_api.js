@@ -98,7 +98,7 @@ function syntax_recognition(input_text){
 function unpack_entity(json)
 {
 	////console.log("unpack");
-	////console.log(json);
+	console.log(json);
 	for(var i = 0; i < json.entities.length; i++) 
 	{
     	var obj = json.entities[i];
@@ -129,7 +129,7 @@ function unpack_sentiment(json)
 function unpack_syntax(json)
 {	
 	let scene_object = [];
-	//console.log(json);
+	console.log(json);
 	for(var i = 0; i < json.tokens.length; i++) 
 	{
     	var obj = json.tokens[i];

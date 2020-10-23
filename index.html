@@ -21,7 +21,6 @@
   <script src="js/nlp_api.js"></script>
   
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  
 </head>
 
 <body style="background-color: rgb(224, 224, 224); zoom: 1;">
@@ -577,9 +576,10 @@
 
 
 
+
 	$("#progress").hide();	
 	var avaliable_animals = ["ArcticFox","Buffalo","Cat","Cheetah","Chick","Cow","Crow","Dog","Donkey","Dove","Duck", "Eagle","Elephant","Flamingo", "Fox","Gazelle", "Goldfish","Hen","Hippo","Hog","Hyena", "Mice", "Ostrich", "Owl", "Ox", "Parrot", "Penguin", "Pig", "Pigeon", "PolarBear","Rabbit","Raccoon","Reindeer","Rhino","Seal", "Sheep", "Snake", "Turtle", "Walrus","Wolf","Zebra" ];
-  	var avaliable_expression = ["stand", "dance", "walk", "fear", "death", "bounce", "talk", "sleep"];
+  	var avaliable_expression = ["stand", "dance", "walk", "fear", "death", "bounce", "talk", "sleep", "spin"];
   		 	
 	var upload_button = document.getElementById('upload-button');
 	var clear_button = document.getElementById('clear-object');
@@ -771,7 +771,10 @@ function looptosay() {
   		
   		}
   	//add_random_animal();
-  	
+  	function capitalizeFirstLetter(string) {
+  		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
   	
   	
   	function generate(animal, mood)
@@ -779,43 +782,75 @@ function looptosay() {
   		 	var select_animal ="";
   		 	var a_maximum_similarity = 0;
   		 	
-  		 	for (var i = 0; i < avaliable_animals.length; i++) 
-  		 		{
-    			var a_similarity = Word2VecUtils.findSimilarity(animal, avaliable_animals[i].toLowerCase());
-    			if (a_similarity > a_maximum_similarity)
-    				{
-    				a_maximum_similarity = a_similarity;
-    				select_animal = avaliable_animals[i];
-    				////console.log(avaliable_animals[i], similarity);
-    				}
-    				
-				}
-				////console.log("select_animal -->" + select_animal);
-  		 
+  		 	
+  		 	var semantic_mode = 0;
+  		 	
+  		 	if (semantic_mode == 0){
+				for (var i = 0; i < avaliable_animals.length; i++) 
+					{
+						select_animal = capitalizeFirstLetter(animal);
+						
+						}
+
+					
+  		 		}
+  		 		
+  		 	if (semantic_mode == 1){
+				for (var i = 0; i < avaliable_animals.length ; i++) 
+					{
+					var a_similarity = Word2VecUtils.findSimilarity(animal, avaliable_animals[i].toLowerCase());
+					if (a_similarity > a_maximum_similarity)
+						{
+						a_maximum_similarity = a_similarity;
+						select_animal = avaliable_animals[i];
+						////console.log(avaliable_animals[i], similarity);
+						}
+					
+					}
+					////console.log("select_animal -->" + select_animal);
+  		 		}
   		 	
   		 	var select_expression ="";
-  			var e_maximum_similarity = 0;	
-  		 	for (var i = 0; i < avaliable_expression.length; i++) 
-  		 		{
-    			var e_similarity = Word2VecUtils.findSimilarity(mood, avaliable_expression[i]);
-    			if (e_similarity > e_maximum_similarity)
-    				{
-    				e_maximum_similarity = e_similarity;
-    				select_expression = avaliable_expression[i];
-    				////console.log(mood[i], e_similarity);
-    				}
-    				
-				}
-				//console.log("avaliable_expression -->" + select_expression);
-				if (select_expression == "sleep"){select_expression = "death";}
-				
-				
-  		 		
-  		 		recently_created_object = '#' + select_animal + "-" + select_expression;
-  		 		////console.log(recently_created_object);
-  		 		add_entity (recently_created_object, select_expression);
-  		 		
+  			var e_maximum_similarity = 0;
+  			var i = 0;	
+  			
+  			word2vect_search (i);
 
+			function word2vect_search (i){
+
+						if (i < avaliable_expression.length ) 
+							{
+							var e_similarity = Word2VecUtils.findSimilarity(mood, avaliable_expression[i]);
+							
+							console.log(mood +  " | avaliable_expression -->" + e_similarity  + " | " + avaliable_expression[i]) ;
+							if (e_similarity > e_maximum_similarity)
+								{
+								e_maximum_similarity = e_similarity;
+								select_expression = avaliable_expression[i];
+								if (select_expression == "sleep"){select_expression = "death";}
+								else if (select_expression == "spin"){select_expression = "dance";}
+								}
+							
+							i ++;
+							//console.log("i = "+ i);
+							word2vect_search(i);
+							}
+						
+						else{
+						recently_created_object = '#' + select_animal + "-" + select_expression;
+  		 				////console.log(recently_created_object);
+  		 				add_entity (recently_created_object, select_expression);
+						//console.log(recently_created_object + " | " + select_expression)
+						
+						}
+				
+				
+				}
+
+				
+				
+  		 		
+  		 		
   		}
 
   		//generate("rabbit", "sleep");
@@ -962,7 +997,7 @@ function looptosay() {
 			  var item = data.items[random];
 	  			  ////console.log( item.link );
 			  	sky = document.querySelector("#sky_object");
-				sky.setAttribute('src', item.link );
+				sky.setAttribute( 'src', item.link );
 						 
 			
 		  }).fail(function(data) {
