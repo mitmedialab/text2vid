@@ -18,7 +18,7 @@ function entity_recognition(input_text){
 
         if (_result) { 
         	 unpack_entity(_result);
-            //console.log(_result);
+            ////console.log(_result);
         } else {
             alert('ERROR');
         }
@@ -51,7 +51,7 @@ function sentiment_recognition(input_text){
 
         if (_result) { 
         	unpack_sentiment(_result);
-            //console.log(_result);
+            ////console.log(_result);
         } else {
             alert('ERROR');
         }
@@ -83,7 +83,7 @@ function syntax_recognition(input_text){
 
         if (_result) { 
         	unpack_syntax(_result);
-            //console.log(_result);
+            ////console.log(_result);
         } else {
             alert('ERROR');
         }
@@ -97,20 +97,20 @@ function syntax_recognition(input_text){
 
 function unpack_entity(json)
 {
-	//console.log("unpack");
-	//console.log(json);
+	////console.log("unpack");
+	////console.log(json);
 	for(var i = 0; i < json.entities.length; i++) 
 	{
     	var obj = json.entities[i];
-		//console.log(obj);
+		////console.log(obj);
 		if (obj.type == "LOCATION")
 			{
-			console.log("Location = " + obj.name);
+			//console.log("Location = " + obj.name);
 			find_background(obj.name);
 			}
 		if (obj.type == "ORGANIZATION")
 			{
-			//console.log("Location = " + obj.name);
+			////console.log("Location = " + obj.name);
 			find_background(obj.name);
 			}
 	}
@@ -119,27 +119,27 @@ function unpack_entity(json)
 
 function unpack_sentiment(json)
 {
-	//console.log("unpack");
-	//console.log(json);
+	////console.log("unpack");
+	////console.log(json);
 	var sentiment_value = json.documentSentiment.score;
-	console.log("sentiment = " + sentiment_value);
+	//console.log("sentiment = " + sentiment_value);
 		
 	}
 
 function unpack_syntax(json)
 {	
 	let scene_object = [];
-	console.log(json);
+	//console.log(json);
 	for(var i = 0; i < json.tokens.length; i++) 
 	{
     	var obj = json.tokens[i];
-		//console.log(obj);
+		////console.log(obj);
 		if (obj.partOfSpeech.tag == "NOUN")
 			{
 				
 				var noun_object = {order: i, object: obj.text.content, adj: "",v:"",de: obj.dependencyEdge.headTokenIndex};
 				scene_object.push(noun_object); 
-				//console.log(obj.text.content + ", order : "+  i);  
+				////console.log(obj.text.content + ", order : "+  i);  
 			}
 	
 	}
@@ -148,16 +148,16 @@ function unpack_syntax(json)
 				var obj = json.tokens[i];
 				for(var  n = 0; n < scene_object.length; n++)
 				{	
-					//console.log("word :" + obj.text.content + " -- obj.dependencyEdge.headTokenIndex:" + obj.dependencyEdge.headTokenIndex + "| " + scene_object[n].object + " --  scene_object.order: " + scene_object[n].order);
+					////console.log("word :" + obj.text.content + " -- obj.dependencyEdge.headTokenIndex:" + obj.dependencyEdge.headTokenIndex + "| " + scene_object[n].object + " --  scene_object.order: " + scene_object[n].order);
 					if (obj.dependencyEdge.headTokenIndex == scene_object[n].order)
 						{
 							if (obj.partOfSpeech.tag == "ADJ"){scene_object[n].adj = obj.text.content;}
 							else if (obj.partOfSpeech.tag == "VERB"){scene_object[n].v = obj.text.content;}
 							
-						//console.log("-->" + obj.text.content);
+						////console.log("-->" + obj.text.content);
 						} 
 				
-				//console.log("-->" + json.tokens[i].text.content);
+				////console.log("-->" + json.tokens[i].text.content);
 				}
 					
 			}
@@ -186,14 +186,14 @@ function unpack_syntax(json)
 								}
 							}
 						
-					//console.log("-->" + obj.text.content);
+					////console.log("-->" + obj.text.content);
 					
 					} 
 				}
 			}
 	
 	text_to_object(scene_object);
-	console.log(scene_object);
+	//console.log(scene_object);
    
 }	
 
@@ -212,7 +212,7 @@ function text_to_object(scene_object)
 				}
 			
 			generate(scene_object[n].object, mood);
-			//console.log(scene_object[n]);
+			////console.log(scene_object[n]);
 			}
 
 	}

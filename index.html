@@ -476,57 +476,57 @@
       <a-curve-point position="-1 -0.1 .1"></a-curve-point>
     </a-curve>
     
-    <!-->Camera Track<--!>
+    <!--->Camera Track<---!>
     
-    <a-curve id="camera_track0"><!-->3000<--!>
+    <a-curve id="camera_track0">
       <a-curve-point position="0 0 4"></a-curve-point>
       <a-curve-point position="0 0 4"></a-curve-point>
     </a-curve>
  	
- 	<a-curve id="camera_track1"><!-->3000<--!>
+ 	<a-curve id="camera_track1">
       <a-curve-point position="0 0 2"></a-curve-point>
       <a-curve-point position="0 0 4"></a-curve-point>
     </a-curve>
     
-    <a-curve id="camera_track2"><!-->3000<--!>
+    <a-curve id="camera_track2">
       <a-curve-point position="0 0 0"></a-curve-point>
       <a-curve-point position="1 0 0"></a-curve-point>
       <a-curve-point position="1 0 4"></a-curve-point>
     </a-curve>
     
-     <a-curve id="camera_track3"><!-->1000<--!>
+     <a-curve id="camera_track3">
       <a-curve-point position="1 0 0"></a-curve-point>
       <a-curve-point position="0 0 1"></a-curve-point>
       <a-curve-point position="1 0 2"></a-curve-point>
       <a-curve-point position="1 0 4"></a-curve-point>
     </a-curve>
     
-    <a-curve id="camera_track4"><!-->3000<--!>
+    <a-curve id="camera_track4">
       <a-curve-point position="1 0 1.5 "></a-curve-point>
       <a-curve-point position="0 0 2 "></a-curve-point>
       <a-curve-point position="0 0 4"></a-curve-point>
     </a-curve>
     
     
-    <a-curve id="camera_track5"><!-->3000<--!>
+    <a-curve id="camera_track5">
       <a-curve-point position="0 .5 1 "></a-curve-point>
       <a-curve-point position="0 0 3 "></a-curve-point>
       <a-curve-point position="0 0 4"></a-curve-point>
     </a-curve>
     
-    <a-curve id="camera_track6"><!-->3000<--!>
+    <a-curve id="camera_track6">
       <a-curve-point position="2 -1 1 "></a-curve-point>
       <a-curve-point position="0 0 2 "></a-curve-point>
       <a-curve-point position="0 0 4"></a-curve-point>
     </a-curve>
     
-    <a-curve id="camera_track7"><!-->3000<--!>
+    <a-curve id="camera_track7">
       <a-curve-point position="0 -1 1 "></a-curve-point>
       <a-curve-point position="0 0 2 "></a-curve-point>
       <a-curve-point position="0 0 4"></a-curve-point>
     </a-curve>
     
-    <a-curve id="camera_track8"><!-->3000<--!>
+    <a-curve id="camera_track8">
       <a-curve-point position="0 -2 0 "></a-curve-point>
       <a-curve-point position="1 1 4 "></a-curve-point>
       <a-curve-point position="1 1 5"></a-curve-point>
@@ -590,42 +590,43 @@
 	var input_text;
 	var recently_created_object;
 	var id_count = 0;
-	//console.log("id_count-->" + id_count);
+	////console.log("id_count-->" + id_count);
 	var object_id;
 	var audio_status = 1; //audio_volume
-	//console.log("type is " + typeof object_id);
+	////console.log("type is " + typeof object_id);
+	var object_in_location_x =0;
 	
 	upload_button.addEventListener('click', function() {
 		input_text = document.getElementById('databox');
 		document.getElementById("upload_status").innerHTML = "Magic is happening";
 		$("#progress").show();
-		//console.log(input_text.value);
+		////console.log(input_text.value);
 		init_speech(input_text.value);
 	});
 	
 	clear_button.addEventListener('click', function() {
 		remove_all_object();
-		console.log("clear");	
+		//console.log("clear");	
 	});
 	
 	add_button.addEventListener('click', function() {
 		add_random_animal();
-		console.log("add object");	
+		//console.log("add object");	
 	});
 	
 	add_animation_button.addEventListener('click', function() {
 		add_animation(recently_created_object);
-		console.log("add animation");	
+		//console.log("add animation");	
 	});
 	
 	cam_animation_button.addEventListener('click', function() {
-		console.log("cam animation");
+		//console.log("cam animation");
 		scene_animtion ();	
 	});
 	
 	
 	audio_button.addEventListener('click', function() {
-		console.log("audio animation");
+		//console.log("audio animation");
 		if (audio_status == 0)
 			{ 
 			document.getElementById("audio_status_display").innerHTML = "Audio On";
@@ -678,8 +679,8 @@ var splitted_text =""
 function init_speech(input_text){
 	phrase_count = 0;
 	splitted_text = input_text.split(".");
-	phrase_total = splitted_text.length;
-	console.log(splitted_text);
+	phrase_total = splitted_text.length -1;
+	//console.log(splitted_text);
 	looptosay();
 }
 
@@ -687,22 +688,31 @@ function init_speech(input_text){
 function looptosay() {
   var tosay  =  splitted_text[phrase_count];
   document.getElementById("current_line").innerHTML = tosay;
-  //console.log(tosay);
-  
-//scene_happening!  
- remove_all_object();
+  ////console.log(tosay);
+  object_in_location_x = 0;  
   scene_animtion ();
+  remove_all_object();
   nlp_process(tosay);
   
   
   speak(tosay, function() { 
+ 
+  	 
 	  if (phrase_count < phrase_total-1){
+	    console.log("phrase_count :" + phrase_count + ", phrase_total :" + phrase_total);
 	  	phrase_count = phrase_count + 1;
-		looptosay();
+	  	
+	  	  //scene_happening!
+	  	
+	  	setTimeout(function(){ 
+	  	looptosay(); 
+  		}, 1000);
+		
 	  }
 	  //Visualization is finished
-	  else{$(
-	  "#progress").hide();
+	  else{
+	  console.log("else1")
+	  $("#progress").hide();
 	  document.getElementById("upload_status").innerHTML = "Visualize Story";
 	  }
    });
@@ -722,8 +732,8 @@ function looptosay() {
   	function scene_animtion ()
   		{
   		selectObject = document.querySelector("#cam_object");
-  		var cam_movement = getRndInteger(1,7);
-  		//console.log(cam_movement);
+  		var cam_movement = getRndInteger(0,5);
+  		console.log(cam_movement);
 		
 		if (cam_movement == 0)
 				{
@@ -739,21 +749,13 @@ function looptosay() {
 				}
 		else if (cam_movement == 3)
 				{
-				selectObject.setAttribute ('alongpath', 'curve: #camera_track3; loop: false; rotate: true; dur: 1000;');
+				selectObject.setAttribute ('alongpath', 'curve: #camera_track4; loop: false; rotate: true; dur: 2000;');
 				}
 		else if (cam_movement == 4)
 				{
-				selectObject.setAttribute ('alongpath', 'curve: #camera_track4; loop: false; rotate: true; dur: 2000;');
-				}
-		else if (cam_movement == 5)
-				{
 				selectObject.setAttribute ('alongpath', 'curve: #camera_track5; loop: false; rotate: true; dur: 1000;');
 				}
-		else if (cam_movement == 6)
-				{
-				selectObject.setAttribute ('alongpath', 'curve: #camera_track7; loop: false; rotate: true; dur:1000;');
-				}
-		else if (cam_movement == 7)
+		else if (cam_movement == 5)
 				{
 				selectObject.setAttribute ('alongpath', 'curve: #camera_track8; loop: false; rotate: true; dur: 1000;');
 				}	
@@ -764,7 +766,7 @@ function looptosay() {
   		var select_animal = avaliable_animals [Math.floor(Math.random() * (avaliable_animals.length - 1) ) + 1];
   		var select_expression = avaliable_expression [Math.floor(Math.random() * (avaliable_expression.length - 1) ) + 1];
   		recently_created_object = '#' + select_animal + "-" + select_expression;
-  		//console.log(recently_created_object);
+  		////console.log(recently_created_object);
   		add_entity (recently_created_object, select_expression);
   		
   		}
@@ -784,11 +786,11 @@ function looptosay() {
     				{
     				a_maximum_similarity = a_similarity;
     				select_animal = avaliable_animals[i];
-    				//console.log(avaliable_animals[i], similarity);
+    				////console.log(avaliable_animals[i], similarity);
     				}
     				
 				}
-				//console.log("select_animal -->" + select_animal);
+				////console.log("select_animal -->" + select_animal);
   		 
   		 	
   		 	var select_expression ="";
@@ -800,17 +802,17 @@ function looptosay() {
     				{
     				e_maximum_similarity = e_similarity;
     				select_expression = avaliable_expression[i];
-    				//console.log(mood[i], e_similarity);
+    				////console.log(mood[i], e_similarity);
     				}
     				
 				}
-				console.log("avaliable_expression -->" + select_expression);
+				//console.log("avaliable_expression -->" + select_expression);
 				if (select_expression == "sleep"){select_expression = "death";}
 				
 				
   		 		
   		 		recently_created_object = '#' + select_animal + "-" + select_expression;
-  		 		//console.log(recently_created_object);
+  		 		////console.log(recently_created_object);
   		 		add_entity (recently_created_object, select_expression);
   		 		
 
@@ -823,7 +825,7 @@ function looptosay() {
   		{
   		id_count = id_count + 1;
   		object_id = "id" +  String(id_count);
-  		//console.log("object_id -->" + object_id);
+  		////console.log("object_id -->" + object_id);
   		}	
   		
   		//generate_object_id();
@@ -834,9 +836,17 @@ function looptosay() {
 		var newEl = document.createElement('a-entity');
     	newEl.setAttribute('gltf-model', name);
     	sceneEl.appendChild(newEl);
-		var x = Math.random()*7 - 3;
 		var rotation = "0 0 0";
-    	var position = String (x) + "0 0";
+		
+		if (object_in_location_x & 1){
+			console.log("object_in_location_x " + object_in_location_x + "odd");
+			var position = String (object_in_location_x) + "0 0";
+			}
+		else{
+			console.log("object_in_location_x " + object_in_location_x + "even");
+			var position = String (0 - object_in_location_x) + "0 0";
+			}
+			   	
       	newEl.setAttribute('position', position);
       	generate_object_id();
     	newEl.setAttribute('id', object_id);
@@ -844,7 +854,7 @@ function looptosay() {
 		
 		if (expression == "death")
 			{
-			//console.log(expression);
+			////console.log(expression);
 			newEl.setAttribute('animation-mixer', 'loop: once; clampWhenFinished: true');
 			}
 		else{
@@ -853,6 +863,9 @@ function looptosay() {
       		
       	add_animation(expression);
       	
+      	var x = Math.random()*.2 + 1;
+		object_in_location_x =  object_in_location_x + x;
+      	
 		}
 	
 	function remove_all_object()
@@ -860,7 +873,7 @@ function looptosay() {
 		for (var i = id_count; i> 0; i--)
 			{
 			var remove_object_id = "id" +  String(i);
-			//console.log("remove_object_id" + remove_object_id);
+			////console.log("remove_object_id" + remove_object_id);
 			previousObject = document.querySelector("#"+remove_object_id);
 			if (previousObject != null){
         	previousObject.parentNode.removeChild(previousObject);
@@ -895,7 +908,7 @@ function looptosay() {
 					//previousObject.setAttribute('rotation', position);
 					var a = document.createElement("a-animation");
 					a.setAttribute('attribute','rotation');
-					//console.log(selectObject.position);
+					////console.log(selectObject.position);
 			
 					a.setAttribute('to', '120 120 0');
 					a.setAttribute('direction', 'alternate');
@@ -943,17 +956,17 @@ function looptosay() {
 		var keyword = location;
 		var url = "https://www.googleapis.com/customsearch/v1?key= AIzaSyA4aOIGeiNo_8v9aKHhIJH7AOKSHXFlRTA &cx=005124428384360536924:rstfldysumw&q="+keyword+"&searchType=image&safe=high";
 		var jqxhr = $.getJSON(url, function() {
-			//console.log("success");
+			////console.log("success");
 		  }).done(function(data) {
 			  var random = getRndInteger(0, 4);
 			  var item = data.items[random];
-	  			  //console.log( item.link );
+	  			  ////console.log( item.link );
 			  	sky = document.querySelector("#sky_object");
 				sky.setAttribute('src', item.link );
 						 
 			
 		  }).fail(function(data) {
-			console.log("error");
+			//console.log("error");
 		  });
 
 					
