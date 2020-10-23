@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1> Testing sentiment Analysis </h1>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+var a = "forest";
+var url = "https://www.googleapis.com/customsearch/v1?key= AIzaSyA4aOIGeiNo_8v9aKHhIJH7AOKSHXFlRTA &cx=005124428384360536924:rstfldysumw&q="+a+"&searchType=image&safe=high";
+  var jqxhr = $.getJSON(url, function() {
+    console.log("success");
+  }).done(function(data) {
+    for (var i = 0; i < 4; i++) {
+      var item = data.items[i];
+      
+      console.log( item.link );
+    }
+  }).fail(function(data) {
+    console.log("error");
+  });
+
+
+</script>
+</body>
+</html>

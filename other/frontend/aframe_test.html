@@ -1,0 +1,215 @@
+<head>
+  <title>My A-Frame Scene</title>
+  <script src="https://rawgit.com/aframevr/aframe/master/dist/aframe-master.min.js"></script>
+  <script src="https://rawgit.com/protyze/aframe-curve-component/master/dist/aframe-curve-component.min.js"></script>
+  <script src="https://rawgit.com/protyze/aframe-alongpath-component/master/dist/aframe-alongpath-component.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+</head>
+
+<body>
+  <a-scene>
+  	<a-entity position="0 0 4" alongpath="curve: #camera_track0; loop: false; rotate: true; dur: 2000;">
+		<a-camera >
+			
+		</a-camera>
+    </a-entity>
+    <!--ground--!>
+	<a-plane rotation="-90 0 0" width="10" height="6" color="#7BC8A4"></a-plane>
+	<a-sky id="sky_object" rotation="0 -90 0" color="#7BC0A4"></a-sky>
+	 
+	 <a-assets>		
+    <a-asset-item id="Rhino-walk" src="GLTF/Animations/Rhino_Walk.gltf"></a-asset-item>
+    <a-asset-item id="Rabbit-walk" src="GLTF/Animations/Rabbit_Walk.gltf"></a-asset-item>
+ 	</a-assets>
+ 	
+ 	<a-curve id="camera_track0"><!-->3000<--!>
+      <a-curve-point position="0 0 4"></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+ 	
+ 	<a-curve id="camera_track1"><!-->3000<--!>
+      <a-curve-point position="0 0 2"></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track2"><!-->3000<--!>
+      <a-curve-point position="0 0 0"></a-curve-point>
+      <a-curve-point position="1 0 0"></a-curve-point>
+      <a-curve-point position="1 0 4"></a-curve-point>
+    </a-curve>
+    
+     <a-curve id="camera_track3"><!-->1000<--!>
+      <a-curve-point position="1 0 0"></a-curve-point>
+      <a-curve-point position="0 0 1"></a-curve-point>
+      <a-curve-point position="1 0 2"></a-curve-point>
+      <a-curve-point position="1 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track4"><!-->3000<--!>
+      <a-curve-point position="1 0 1.5 "></a-curve-point>
+      <a-curve-point position="0 0 2 "></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    
+    <a-curve id="camera_track5"><!-->3000<--!>
+      <a-curve-point position="0 .5 1 "></a-curve-point>
+      <a-curve-point position="0 0 3 "></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track6"><!-->3000<--!>
+      <a-curve-point position="2 -1 1 "></a-curve-point>
+      <a-curve-point position="0 0 2 "></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track7"><!-->3000<--!>
+      <a-curve-point position="0 -1 1 "></a-curve-point>
+      <a-curve-point position="0 0 2 "></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track8"><!-->3000<--!>
+      <a-curve-point position="0 -2 0 "></a-curve-point>
+      <a-curve-point position="1 1 4 "></a-curve-point>
+      <a-curve-point position="1 1 5"></a-curve-point>
+    </a-curve>
+    
+    
+    
+    
+    <a-curve id="track1">
+      <a-curve-point position="-2 0 1"></a-curve-point>
+      <a-curve-point position=" 2 0 1"></a-curve-point>
+      <a-curve-point position="-2 0 1"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="track2">
+      <a-curve-point position="-1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 0.1 1"></a-curve-point>
+      <a-curve-point position=" 1 0 -1"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -1"></a-curve-point>
+      <a-curve-point position="-1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 .1 -1"></a-curve-point>
+      <a-curve-point position="-1 0 -1"></a-curve-point>
+      <a-curve-point position="-1 0 1"></a-curve-point>
+    
+    <a-curve-point position="-.7 0 .7"></a-curve-point>
+      <a-curve-point position=" .7 0.1 .7"></a-curve-point>
+      <a-curve-point position=" .7 0 -.7"></a-curve-point>
+      <a-curve-point position="-.7 -0.1 -.7"></a-curve-point>
+      <a-curve-point position="-.7 0 .7"></a-curve-point>
+      <a-curve-point position=" .7 0 .7"></a-curve-point>
+      <a-curve-point position=" .7 .1 -.7"></a-curve-point>
+      <a-curve-point position="-.7 0 -.7"></a-curve-point>
+      <a-curve-point position="-.7 0 .7"></a-curve-point>
+      
+            <a-curve-point position="-1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 0.1 1"></a-curve-point>
+      <a-curve-point position=" 1 0 -1"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -1"></a-curve-point>
+      <a-curve-point position="-1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 .1 -1"></a-curve-point>
+      <a-curve-point position="-1 0 -1"></a-curve-point>
+      <a-curve-point position="-1 0 1"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="track3">
+      <a-curve-point position=" .1 0 .1"></a-curve-point>
+      <a-curve-point position=" .3 0 .3"></a-curve-point>
+      <a-curve-point position=" .5 -.1 .6"></a-curve-point>
+      <a-curve-point position=" .0 0 .8"></a-curve-point>
+      <a-curve-point position=" -.3 0 .6"></a-curve-point>
+      <a-curve-point position=" .1 0 -.2"></a-curve-point>
+      <a-curve-point position=" .3 -.1 -.5"></a-curve-point>
+      <a-curve-point position=" .5 0 0"></a-curve-point>
+      <a-curve-point position=" .8 0 .3"></a-curve-point>
+      <a-curve-point position=" .5 .2 .5"></a-curve-point>
+      <a-curve-point position=" .3 0 .8"></a-curve-point>
+      <a-curve-point position=" -.2 -.1 .6"></a-curve-point>
+      <a-curve-point position=" -.5 0 .5"></a-curve-point>
+      <a-curve-point position=" -.1 0 .2"></a-curve-point>
+      <a-curve-point position=" .1 0 .1"></a-curve-point>
+      <a-curve-point position=" .3 0 .3"></a-curve-point>
+      <a-curve-point position=" .5 0.1 .6"></a-curve-point>
+      <a-curve-point position=" .0 0 .8"></a-curve-point>
+      <a-curve-point position=" .0 0 .5"></a-curve-point>
+      <a-curve-point position=" .3 0 .3"></a-curve-point>
+    </a-curve>
+    
+    
+    
+    <a-curve id="track4">
+      <a-curve-point position="0 0 0"></a-curve-point>
+	  <a-curve-point position="-2 0 -1"></a-curve-point>
+      <a-curve-point position="1 0 1"></a-curve-point>
+      <a-curve-point position="0 0 0"></a-curve-point>
+    </a-curve>
+    
+    
+     <a-curve id="track5">
+      <a-curve-point position=" -.1 0 -.1"></a-curve-point>
+      <a-curve-point position=" -.3 0 -.3"></a-curve-point>
+      <a-curve-point position=" -.5 -.1 -.6"></a-curve-point>
+      <a-curve-point position=" -.0 0 -.8"></a-curve-point>
+      <a-curve-point position=" .3 0 -.6"></a-curve-point>
+      <a-curve-point position=" -.1 0 .2"></a-curve-point>
+      <a-curve-point position=" -.3 -.1 .5"></a-curve-point>
+      <a-curve-point position=" -.5 0 0"></a-curve-point>
+      <a-curve-point position=" -.8 0 -.3"></a-curve-point>
+      <a-curve-point position=" -.5 .2 -.5"></a-curve-point>
+      <a-curve-point position=" -.3 0 -.8"></a-curve-point>
+      <a-curve-point position=" .2 -.1 .6"></a-curve-point>
+      <a-curve-point position=" .5 0 -.5"></a-curve-point>
+      <a-curve-point position=" .1 0 -.2"></a-curve-point>
+      <a-curve-point position=" -.1 0 -.1"></a-curve-point>
+      <a-curve-point position=" -.3 0 -.3"></a-curve-point>
+      <a-curve-point position=" -.5 0.1 -.6"></a-curve-point>
+      <a-curve-point position=" .0 0 -.8"></a-curve-point>
+      <a-curve-point position=" .0 0 -.5"></a-curve-point>
+      <a-curve-point position=" -.3 0 -.3"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="track6">
+      <a-curve-point position="-2 0.1 -.0"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -.1"></a-curve-point>
+      <a-curve-point position=" 0 0.1 -.2"></a-curve-point>
+      <a-curve-point position=" 1 0 -.1"></a-curve-point>
+      <a-curve-point position=" 2 0.2 0"></a-curve-point>
+      <a-curve-point position=" 1 -0.1 .1"></a-curve-point>
+      <a-curve-point position=" 0 0 .2"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -.1"></a-curve-point>
+      <a-curve-point position="-2 0.1  0"></a-curve-point>
+      <a-curve-point position="-1 -0.1 .1"></a-curve-point>
+      <a-curve-point position=" 0 0.1 -.1"></a-curve-point>
+      <a-curve-point position=" 1 0 -.1"></a-curve-point>
+      <a-curve-point position=" 2 0.2 0"></a-curve-point>
+      <a-curve-point position=" 1 -0.1 .1"></a-curve-point>
+      <a-curve-point position=" 0 0 .2"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -.1"></a-curve-point>
+      <a-curve-point position="-2 0.1  0"></a-curve-point>
+      <a-curve-point position="-1 -0.1 .1"></a-curve-point>
+      
+    </a-curve>
+    
+    <a-entity rotation="0 0 0" gltf-model="#Rabbit-walk" animation-mixer="loop: loop" id="bluebox" position="0 0 0" "></a-enity>
+  </a-scene>
+  
+  <script>
+ 	 function test(){
+  		selectObject = document.querySelector("#bluebox");
+  		//selectObject.setAttribute ('alongpath', 'curve: #track1; loop: true; rotate: true; dur: 8000;')
+  		//selectObject.setAttribute ('alongpath', 'curve: #track2; loop: true; rotate: true; dur: 38000;')
+  		//selectObject.setAttribute ('alongpath', 'curve: #track3; loop: true; rotate: true; dur: 12000;')
+  		//selectObject.setAttribute ('alongpath', 'curve: #track4; loop: true; rotate: true; dur: 8000;')
+  		//selectObject.setAttribute ('alongpath', 'curve: #track5; loop: true; rotate: true; dur: 10000;')
+  		selectObject.setAttribute ('alongpath', 'curve: #track6; loop: true; rotate: true; dur: 8000;')
+  		}
+  	test();
+  </script>
+</body>
+
+

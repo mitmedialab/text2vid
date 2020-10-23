@@ -1,0 +1,972 @@
+<html lang="en"><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+  <meta property="og:image" content="images/intro.jpeg">
+  <title>Text2Vid</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.6.7.min.js"></script>
+  <script src="https://rawgit.com/aframevr/aframe/master/dist/aframe-master.min.js"></script>
+  <script src="https://unpkg.com/aframe-text-geometry-component@0.5.1/dist/aframe-text-geometry-component.min.js"></script>
+  <script src="https://rawgit.com/protyze/aframe-curve-component/master/dist/aframe-curve-component.min.js"></script>
+  <script src="https://rawgit.com/protyze/aframe-alongpath-component/master/dist/aframe-alongpath-component.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+  
+  <script src="js/word2vec/data/wordvecs10000.js"></script>
+  <script src="js/word2vec/assets/js/word2vecutils.js"></script>
+  <script src="js/nlp_api.js"></script>
+  
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
+</head>
+
+<body style="background-color: rgb(224, 224, 224); zoom: 1;">
+<div class="navbar-fixed">
+  <nav class="black lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Text2Vid</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#demo">Demo</a></li>
+      </ul>
+</div></nav></div>
+  
+  <div class="section no-pad-bot" id="index-banner">
+  
+  	
+	
+<div class="container">
+
+      <div id="demo" style="padding-bottom: 50px;"></div>
+      <div class="row center">
+        <div class="card">
+   				<div class="card-content">
+      			<div class="input-field col s12">
+         		 <i class="material-icons prefix">mode_edit</i>
+         		 <textarea id="databox" class="materialize-textarea" style="height: 45px;">Once upon a time, there is a rabbit and a turtle in the forest. The rabbit is fast. The turtle is slow.</textarea>
+         		 <!--<label for="icon_prefix" class="">VR Story Tellers</label>-->
+        		</div><a href="#demo" id="upload-button" class="btn-large waves-effect pink lighten-1"><div id="upload_status">Visualize Story</div></a>
+        		 
+        		 <a href="#" id="clear-object" class="btn-large waves-effect black lighten-1">Clear</a>
+        		 <a href="#" id="add-object" class="btn-large waves-effect black lighten-1">Add</a>
+        		 <a href="#" id="add-animation" class="btn-large waves-effect black lighten-1">Animate</a>
+        		 <a href="#" id="cam-animation" class="btn-large waves-effect black lighten-1">Camera</a>
+        		 <a href="#" id="audio-onoff" class="btn-large waves-effect grey lighten-1"><div id="audio_status_display">Audio On</div></a>
+        		 
+        		 
+        		<span class="card-title activator grey-text text-darken-4">
+      			</span></div>
+    			
+  				
+ 		 </div>
+ 		 
+ 		 
+ 		   <!-- Aframe  -->
+ 		 <div style = "height: 500px;">
+ 		 	<!-- Assets  -->
+ 		 
+ 		 	<a-scene class="aframebox" embedded>
+ 		 	<a-assets>
+    			<a-asset-item id="ArcticFox-stand" src="GLTF/Animations/ArcticFox_Idle.gltf"></a-asset-item>
+<a-asset-item id="ArcticFox-dance" src="GLTF/Animations/ArcticFox_Spin.gltf"></a-asset-item>
+<a-asset-item id="ArcticFox-walk" src="GLTF/Animations/ArcticFox_Walk.gltf"></a-asset-item>
+<a-asset-item id="ArcticFox-fear" src="GLTF/Animations/ArcticFox_Fear.gltf"></a-asset-item>
+<a-asset-item id="ArcticFox-death" src="GLTF/Animations/ArcticFox_Death.gltf"></a-asset-item>
+<a-asset-item id="ArcticFox-bounce" src="GLTF/Animations/ArcticFox_Bounce.gltf"></a-asset-item>
+<a-asset-item id="ArcticFox-talk" src="GLTF/Animations/ArcticFox_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Buffalo-stand" src="GLTF/Animations/Buffalo_Idle.gltf"></a-asset-item>
+<a-asset-item id="Buffalo-dance" src="GLTF/Animations/Buffalo_Spin.gltf"></a-asset-item>
+<a-asset-item id="Buffalo-walk" src="GLTF/Animations/Buffalo_Walk.gltf"></a-asset-item>
+<a-asset-item id="Buffalo-fear" src="GLTF/Animations/Buffalo_Fear.gltf"></a-asset-item>
+<a-asset-item id="Buffalo-death" src="GLTF/Animations/Buffalo_Death.gltf"></a-asset-item>
+<a-asset-item id="Buffalo-bounce" src="GLTF/Animations/Buffalo_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Buffalo-talk" src="GLTF/Animations/Buffalo_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Cat-stand" src="GLTF/Animations/Cat_Idle.gltf"></a-asset-item>
+<a-asset-item id="Cat-dance" src="GLTF/Animations/Cat_Spin.gltf"></a-asset-item>
+<a-asset-item id="Cat-walk" src="GLTF/Animations/Cat_Walk.gltf"></a-asset-item>
+<a-asset-item id="Cat-fear" src="GLTF/Animations/Cat_Fear.gltf"></a-asset-item>
+<a-asset-item id="Cat-death" src="GLTF/Animations/Cat_Death.gltf"></a-asset-item>
+<a-asset-item id="Cat-bounce" src="GLTF/Animations/Cat_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Cat-talk" src="GLTF/Animations/Cat_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Cheetah-stand" src="GLTF/Animations/Cheetah_Idle.gltf"></a-asset-item>
+<a-asset-item id="Cheetah-dance" src="GLTF/Animations/Cheetah_Spin.gltf"></a-asset-item>
+<a-asset-item id="Cheetah-walk" src="GLTF/Animations/Cheetah_Walk.gltf"></a-asset-item>
+<a-asset-item id="Cheetah-fear" src="GLTF/Animations/Cheetah_Fear.gltf"></a-asset-item>
+<a-asset-item id="Cheetah-death" src="GLTF/Animations/Cheetah_Death.gltf"></a-asset-item>
+<a-asset-item id="Cheetah-bounce" src="GLTF/Animations/Cheetah_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Cheetah-talk" src="GLTF/Animations/Cheetah_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Chick-stand" src="GLTF/Animations/Chick_Idle.gltf"></a-asset-item>
+<a-asset-item id="Chick-dance" src="GLTF/Animations/Chick_Spin.gltf"></a-asset-item>
+<a-asset-item id="Chick-walk" src="GLTF/Animations/Chick_Fly.gltf"></a-asset-item>
+<a-asset-item id="Chick-fear" src="GLTF/Animations/Chick_Fear.gltf"></a-asset-item>
+<a-asset-item id="Chick-death" src="GLTF/Animations/Chick_Death.gltf"></a-asset-item>
+<a-asset-item id="Chick-bounce" src="GLTF/Animations/Chick_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Chick-talk" src="GLTF/Animations/Chick_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Cow-stand" src="GLTF/Animations/Cow_Idle.gltf"></a-asset-item>
+<a-asset-item id="Cow-dance" src="GLTF/Animations/Cow_Spin.gltf"></a-asset-item>
+<a-asset-item id="Cow-walk" src="GLTF/Animations/Cow_Walk.gltf"></a-asset-item>
+<a-asset-item id="Cow-fear" src="GLTF/Animations/Cow_Fear.gltf"></a-asset-item>
+<a-asset-item id="Cow-death" src="GLTF/Animations/Cow_Death.gltf"></a-asset-item>
+<a-asset-item id="Cow-bounce" src="GLTF/Animations/Cow_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Cow-talk" src="GLTF/Animations/Cow_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Crow-stand" src="GLTF/Animations/Crow_Idle.gltf"></a-asset-item>
+<a-asset-item id="Crow-dance" src="GLTF/Animations/Crow_Spin.gltf"></a-asset-item>
+<a-asset-item id="Crow-walk" src="GLTF/Animations/Crow_Walk.gltf"></a-asset-item>
+<a-asset-item id="Crow-fear" src="GLTF/Animations/Crow_Fear.gltf"></a-asset-item>
+<a-asset-item id="Crow-death" src="GLTF/Animations/Crow_Death.gltf"></a-asset-item>
+<a-asset-item id="Crow-bounce" src="GLTF/Animations/Crow_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Crow-talk" src="GLTF/Animations/Crow_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Dog-stand" src="GLTF/Animations/Dog_Idle.gltf"></a-asset-item>
+<a-asset-item id="Dog-dance" src="GLTF/Animations/Dog_Spin.gltf"></a-asset-item>
+<a-asset-item id="Dog-walk" src="GLTF/Animations/Dog_Walk.gltf"></a-asset-item>
+<a-asset-item id="Dog-fear" src="GLTF/Animations/Dog_Fear.gltf"></a-asset-item>
+<a-asset-item id="Dog-death" src="GLTF/Animations/Dog_Death.gltf"></a-asset-item>
+<a-asset-item id="Dog-bounce" src="GLTF/Animations/Dog_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Dog-talk" src="GLTF/Animations/Dog_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Donkey-stand" src="GLTF/Animations/Donkey_Idle.gltf"></a-asset-item>
+<a-asset-item id="Donkey-dance" src="GLTF/Animations/Donkey_Spin.gltf"></a-asset-item>
+<a-asset-item id="Donkey-walk" src="GLTF/Animations/Donkey_Walk.gltf"></a-asset-item>
+<a-asset-item id="Donkey-fear" src="GLTF/Animations/Donkey_Fear.gltf"></a-asset-item>
+<a-asset-item id="Donkey-death" src="GLTF/Animations/Donkey_Death.gltf"></a-asset-item>
+<a-asset-item id="Donkey-bounce" src="GLTF/Animations/Donkey_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Donkey-talk" src="GLTF/Animations/Donkey_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Dove-stand" src="GLTF/Animations/Dove_Idle.gltf"></a-asset-item>
+<a-asset-item id="Dove-dance" src="GLTF/Animations/Dove_Spin.gltf"></a-asset-item>
+<a-asset-item id="Dove-walk" src="GLTF/Animations/Dove_Walk.gltf"></a-asset-item>
+<a-asset-item id="Dove-fear" src="GLTF/Animations/Dove_Fear.gltf"></a-asset-item>
+<a-asset-item id="Dove-death" src="GLTF/Animations/Dove_Death.gltf"></a-asset-item>
+<a-asset-item id="Dove-bounce" src="GLTF/Animations/Dove_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Dove-talk" src="GLTF/Animations/Dove_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Duck-stand" src="GLTF/Animations/Duck_Idle.gltf"></a-asset-item>
+<a-asset-item id="Duck-dance" src="GLTF/Animations/Duck_Spin.gltf"></a-asset-item>
+<a-asset-item id="Duck-walk" src="GLTF/Animations/Duck_Walk.gltf"></a-asset-item>
+<a-asset-item id="Duck-fear" src="GLTF/Animations/Duck_Fear.gltf"></a-asset-item>
+<a-asset-item id="Duck-death" src="GLTF/Animations/Duck_Death.gltf"></a-asset-item>
+<a-asset-item id="Duck-bounce" src="GLTF/Animations/Duck_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Duck-talk" src="GLTF/Animations/Duck_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Eagle-stand" src="GLTF/Animations/Eagle_Idle.gltf"></a-asset-item>
+<a-asset-item id="Eagle-dance" src="GLTF/Animations/Eagle_Spin.gltf"></a-asset-item>
+<a-asset-item id="Eagle-walk" src="GLTF/Animations/Eagle_Walk.gltf"></a-asset-item>
+<a-asset-item id="Eagle-fear" src="GLTF/Animations/Eagle_Fear.gltf"></a-asset-item>
+<a-asset-item id="Eagle-death" src="GLTF/Animations/Eagle_Death.gltf"></a-asset-item>
+<a-asset-item id="Eagle-bounce" src="GLTF/Animations/Eagle_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Eagle-talk" src="GLTF/Animations/Eagle_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Elephant-stand" src="GLTF/Animations/Elephant_Idle.gltf"></a-asset-item>
+<a-asset-item id="Elephant-dance" src="GLTF/Animations/Elephant_Spin.gltf"></a-asset-item>
+<a-asset-item id="Elephant-walk" src="GLTF/Animations/Elephant_Walk.gltf"></a-asset-item>
+<a-asset-item id="Elephant-fear" src="GLTF/Animations/Elephant_Fear.gltf"></a-asset-item>
+<a-asset-item id="Elephant-death" src="GLTF/Animations/Elephant_Death.gltf"></a-asset-item>
+<a-asset-item id="Elephant-bounce" src="GLTF/Animations/Elephant_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Elephant-talk" src="GLTF/Animations/Elephant_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Flamingo-stand" src="GLTF/Animations/Flamingo_Idle.gltf"></a-asset-item>
+<a-asset-item id="Flamingo-dance" src="GLTF/Animations/Flamingo_Spin.gltf"></a-asset-item>
+<a-asset-item id="Flamingo-walk" src="GLTF/Animations/Flamingo_Walk.gltf"></a-asset-item>
+<a-asset-item id="Flamingo-fear" src="GLTF/Animations/Flamingo_Fear.gltf"></a-asset-item>
+<a-asset-item id="Flamingo-death" src="GLTF/Animations/Flamingo_Death.gltf"></a-asset-item>
+<a-asset-item id="Flamingo-bounce" src="GLTF/Animations/Flamingo_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Flamingo-talk" src="GLTF/Animations/Flamingo_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Fox-stand" src="GLTF/Animations/Fox_Idle.gltf"></a-asset-item>
+<a-asset-item id="Fox-dance" src="GLTF/Animations/Fox_Spin.gltf"></a-asset-item>
+<a-asset-item id="Fox-walk" src="GLTF/Animations/Fox_Walk.gltf"></a-asset-item>
+<a-asset-item id="Fox-fear" src="GLTF/Animations/Fox_Fear.gltf"></a-asset-item>
+<a-asset-item id="Fox-death" src="GLTF/Animations/Fox_Death.gltf"></a-asset-item>
+<a-asset-item id="Fox-bounce" src="GLTF/Animations/Fox_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Fox-talk" src="GLTF/Animations/Fox_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Gazelle-stand" src="GLTF/Animations/Gazelle_Idle.gltf"></a-asset-item>
+<a-asset-item id="Gazelle-dance" src="GLTF/Animations/Gazelle_Spin.gltf"></a-asset-item>
+<a-asset-item id="Gazelle-walk" src="GLTF/Animations/Gazelle_Walk.gltf"></a-asset-item>
+<a-asset-item id="Gazelle-fear" src="GLTF/Animations/Gazelle_Fear.gltf"></a-asset-item>
+<a-asset-item id="Gazelle-death" src="GLTF/Animations/Gazelle_Death.gltf"></a-asset-item>
+<a-asset-item id="Gazelle-bounce" src="GLTF/Animations/Gazelle_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Gazelle-talk" src="GLTF/Animations/Gazelle_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Goldfish-stand" src="GLTF/Animations/Goldfish_Idle.gltf"></a-asset-item>
+<a-asset-item id="Goldfish-dance" src="GLTF/Animations/Goldfish_Splash.gltf"></a-asset-item>
+<a-asset-item id="Goldfish-walk" src="GLTF/Animations/Goldfish_Walk.gltf"></a-asset-item>
+<a-asset-item id="Goldfish-fear" src="GLTF/Animations/Goldfish_Fear.gltf"></a-asset-item>
+<a-asset-item id="Goldfish-death" src="GLTF/Animations/Goldfish_Death.gltf"></a-asset-item>
+<a-asset-item id="Goldfish-bounce" src="GLTF/Animations/Goldfish_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Goldfish-talk" src="GLTF/Animations/Goldfish_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Hen-stand" src="GLTF/Animations/Hen_Idle.gltf"></a-asset-item>
+<a-asset-item id="Hen-dance" src="GLTF/Animations/Hen_Spin.gltf"></a-asset-item>
+<a-asset-item id="Hen-walk" src="GLTF/Animations/Hen_Walk.gltf"></a-asset-item>
+<a-asset-item id="Hen-fear" src="GLTF/Animations/Hen_Fear.gltf"></a-asset-item>
+<a-asset-item id="Hen-death" src="GLTF/Animations/Hen_Death.gltf"></a-asset-item>
+<a-asset-item id="Hen-bounce" src="GLTF/Animations/Hen_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Hen-talk" src="GLTF/Animations/Hen_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Hippo-stand" src="GLTF/Animations/Hippo_Idle.gltf"></a-asset-item>
+<a-asset-item id="Hippo-dance" src="GLTF/Animations/Hippo_Spin.gltf"></a-asset-item>
+<a-asset-item id="Hippo-walk" src="GLTF/Animations/Hippo_Walk.gltf"></a-asset-item>
+<a-asset-item id="Hippo-fear" src="GLTF/Animations/Hippo_Fear.gltf"></a-asset-item>
+<a-asset-item id="Hippo-death" src="GLTF/Animations/Hippo_Death.gltf"></a-asset-item>
+<a-asset-item id="Hippo-bounce" src="GLTF/Animations/Hippo_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Hippo-talk" src="GLTF/Animations/Hippo_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Hog-stand" src="GLTF/Animations/Hog_Idle.gltf"></a-asset-item>
+<a-asset-item id="Hog-dance" src="GLTF/Animations/Hog_Spin.gltf"></a-asset-item>
+<a-asset-item id="Hog-walk" src="GLTF/Animations/Hog_Walk.gltf"></a-asset-item>
+<a-asset-item id="Hog-fear" src="GLTF/Animations/Hog_Fear.gltf"></a-asset-item>
+<a-asset-item id="Hog-death" src="GLTF/Animations/Hog_Death.gltf"></a-asset-item>
+<a-asset-item id="Hog-bounce" src="GLTF/Animations/Hog_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Hog-talk" src="GLTF/Animations/Hog_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Hyena-stand" src="GLTF/Animations/Hyena_Idle.gltf"></a-asset-item>
+<a-asset-item id="Hyena-dance" src="GLTF/Animations/Hyena_Spin.gltf"></a-asset-item>
+<a-asset-item id="Hyena-walk" src="GLTF/Animations/Hyena_Walk.gltf"></a-asset-item>
+<a-asset-item id="Hyena-fear" src="GLTF/Animations/Hyena_Fear.gltf"></a-asset-item>
+<a-asset-item id="Hyena-death" src="GLTF/Animations/Hyena_Death.gltf"></a-asset-item>
+<a-asset-item id="Hyena-bounce" src="GLTF/Animations/Hyena_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Hyena-talk" src="GLTF/Animations/Hyena_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Mice-stand" src="GLTF/Animations/Mice_Idle.gltf"></a-asset-item>
+<a-asset-item id="Mice-dance" src="GLTF/Animations/Mice_Spin.gltf"></a-asset-item>
+<a-asset-item id="Mice-walk" src="GLTF/Animations/Mice_Walk.gltf"></a-asset-item>
+<a-asset-item id="Mice-fear" src="GLTF/Animations/Mice_Fear.gltf"></a-asset-item>
+<a-asset-item id="Mice-death" src="GLTF/Animations/Mice_Death.gltf"></a-asset-item>
+<a-asset-item id="Mice-bounce" src="GLTF/Animations/Mice_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Mice-talk" src="GLTF/Animations/Mice_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Ostrich-stand" src="GLTF/Animations/Ostrich_Idle.gltf"></a-asset-item>
+<a-asset-item id="Ostrich-dance" src="GLTF/Animations/Ostrich_Spin.gltf"></a-asset-item>
+<a-asset-item id="Ostrich-walk" src="GLTF/Animations/Ostrich_Walk.gltf"></a-asset-item>
+<a-asset-item id="Ostrich-fear" src="GLTF/Animations/Ostrich_Fear.gltf"></a-asset-item>
+<a-asset-item id="Ostrich-death" src="GLTF/Animations/Ostrich_Death.gltf"></a-asset-item>
+<a-asset-item id="Ostrich-bounce" src="GLTF/Animations/Ostrich_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Ostrich-talk" src="GLTF/Animations/Ostrich_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Owl-stand" src="GLTF/Animations/Owl_Idle.gltf"></a-asset-item>
+<a-asset-item id="Owl-dance" src="GLTF/Animations/Owl_Spin.gltf"></a-asset-item>
+<a-asset-item id="Owl-walk" src="GLTF/Animations/Owl_Fly.gltf"></a-asset-item>
+<a-asset-item id="Owl-fear" src="GLTF/Animations/Owl_Fear.gltf"></a-asset-item>
+<a-asset-item id="Owl-death" src="GLTF/Animations/Owl_Death.gltf"></a-asset-item>
+<a-asset-item id="Owl-bounce" src="GLTF/Animations/Owl_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Owl-talk" src="GLTF/Animations/Owl_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Ox-stand" src="GLTF/Animations/Ox_Idle.gltf"></a-asset-item>
+<a-asset-item id="Ox-dance" src="GLTF/Animations/Ox_Spin.gltf"></a-asset-item>
+<a-asset-item id="Ox-walk" src="GLTF/Animations/Ox_Walk.gltf"></a-asset-item>
+<a-asset-item id="Ox-fear" src="GLTF/Animations/Ox_Fear.gltf"></a-asset-item>
+<a-asset-item id="Ox-death" src="GLTF/Animations/Ox_Death.gltf"></a-asset-item>
+<a-asset-item id="Ox-bounce" src="GLTF/Animations/Ox_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Ox-talk" src="GLTF/Animations/Ox_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Parrot-stand" src="GLTF/Animations/Parrot_Idle.gltf"></a-asset-item>
+<a-asset-item id="Parrot-dance" src="GLTF/Animations/Parrot_Spin.gltf"></a-asset-item>
+<a-asset-item id="Parrot-walk" src="GLTF/Animations/Parrot_Fly.gltf"></a-asset-item>
+<a-asset-item id="Parrot-fear" src="GLTF/Animations/Parrot_Fear.gltf"></a-asset-item>
+<a-asset-item id="Parrot-death" src="GLTF/Animations/Parrot_Death.gltf"></a-asset-item>
+<a-asset-item id="Parrot-bounce" src="GLTF/Animations/Parrot_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Parrot-talk" src="GLTF/Animations/Parrot_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Penguin-stand" src="GLTF/Animations/Penguin_Idle.gltf"></a-asset-item>
+<a-asset-item id="Penguin-dance" src="GLTF/Animations/Penguin_Spin.gltf"></a-asset-item>
+<a-asset-item id="Penguin-walk" src="GLTF/Animations/Penguin_Fly.gltf"></a-asset-item>
+<a-asset-item id="Penguin-fear" src="GLTF/Animations/Penguin_Fear.gltf"></a-asset-item>
+<a-asset-item id="Penguin-death" src="GLTF/Animations/Penguin_Death.gltf"></a-asset-item>
+<a-asset-item id="Penguin-bounce" src="GLTF/Animations/Penguin_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Penguin-talk" src="GLTF/Animations/Penguin_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Pig-stand" src="GLTF/Animations/Pig_Idle.gltf"></a-asset-item>
+<a-asset-item id="Pig-dance" src="GLTF/Animations/Pig_Spin.gltf"></a-asset-item>
+<a-asset-item id="Pig-walk" src="GLTF/Animations/Pig_Walk.gltf"></a-asset-item>
+<a-asset-item id="Pig-fear" src="GLTF/Animations/Pig_Fear.gltf"></a-asset-item>
+<a-asset-item id="Pig-death" src="GLTF/Animations/Pig_Death.gltf"></a-asset-item>
+<a-asset-item id="Pig-bounce" src="GLTF/Animations/Pig_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Pig-talk" src="GLTF/Animations/Pig_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Pigeon-stand" src="GLTF/Animations/Pigeon_Idle.gltf"></a-asset-item>
+<a-asset-item id="Pigeon-dance" src="GLTF/Animations/Pigeon_Spin.gltf"></a-asset-item>
+<a-asset-item id="Pigeon-walk" src="GLTF/Animations/Pigeon_Walk.gltf"></a-asset-item>
+<a-asset-item id="Pigeon-fear" src="GLTF/Animations/Pigeon_Fear.gltf"></a-asset-item>
+<a-asset-item id="Pigeon-death" src="GLTF/Animations/Pigeon_Death.gltf"></a-asset-item>
+<a-asset-item id="Pigeon-bounce" src="GLTF/Animations/Pigeon_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Pigeon-talk" src="GLTF/Animations/Pigeon_Clicked.gltf"></a-asset-item>
+<a-asset-item id="PolarBear-stand" src="GLTF/Animations/PolarBear_Idle.gltf"></a-asset-item>
+<a-asset-item id="PolarBear-dance" src="GLTF/Animations/PolarBear_Spin.gltf"></a-asset-item>
+<a-asset-item id="PolarBear-walk" src="GLTF/Animations/PolarBear_Walk.gltf"></a-asset-item>
+<a-asset-item id="PolarBear-fear" src="GLTF/Animations/PolarBear_Fear.gltf"></a-asset-item>
+<a-asset-item id="PolarBear-death" src="GLTF/Animations/PolarBear_Death.gltf"></a-asset-item>
+<a-asset-item id="PolarBear-bounce" src="GLTF/Animations/PolarBear_Bounce.gltf"></a-asset-item>
+<a-asset-item id="PolarBear-talk" src="GLTF/Animations/PolarBear_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Rabbit-stand" src="GLTF/Animations/Rabbit_Idle.gltf"></a-asset-item>
+<a-asset-item id="Rabbit-dance" src="GLTF/Animations/Rabbit_Spin.gltf"></a-asset-item>
+<a-asset-item id="Rabbit-walk" src="GLTF/Animations/Rabbit_Walk.gltf"></a-asset-item>
+<a-asset-item id="Rabbit-fear" src="GLTF/Animations/Rabbit_Fear.gltf"></a-asset-item>
+<a-asset-item id="Rabbit-death" src="GLTF/Animations/Rabbit_Death.gltf"></a-asset-item>
+<a-asset-item id="Rabbit-bounce" src="GLTF/Animations/Rabbit_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Rabbit-talk" src="GLTF/Animations/Rabbit_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Raccoon-stand" src="GLTF/Animations/Raccoon_Idle.gltf"></a-asset-item>
+<a-asset-item id="Raccoon-dance" src="GLTF/Animations/Raccoon_Spin.gltf"></a-asset-item>
+<a-asset-item id="Raccoon-walk" src="GLTF/Animations/Raccoon_Walk.gltf"></a-asset-item>
+<a-asset-item id="Raccoon-fear" src="GLTF/Animations/Raccoon_Fear.gltf"></a-asset-item>
+<a-asset-item id="Raccoon-death" src="GLTF/Animations/Raccoon_Death.gltf"></a-asset-item>
+<a-asset-item id="Raccoon-bounce" src="GLTF/Animations/Raccoon_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Raccoon-talk" src="GLTF/Animations/Raccoon_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Reindeer-stand" src="GLTF/Animations/Reindeer_Idle.gltf"></a-asset-item>
+<a-asset-item id="Reindeer-dance" src="GLTF/Animations/Reindeer_Spin.gltf"></a-asset-item>
+<a-asset-item id="Reindeer-walk" src="GLTF/Animations/Reindeer_Walk.gltf"></a-asset-item>
+<a-asset-item id="Reindeer-fear" src="GLTF/Animations/Reindeer_Fear.gltf"></a-asset-item>
+<a-asset-item id="Reindeer-death" src="GLTF/Animations/Reindeer_Death.gltf"></a-asset-item>
+<a-asset-item id="Reindeer-bounce" src="GLTF/Animations/Reindeer_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Reindeer-talk" src="GLTF/Animations/Reindeer_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Rhino-stand" src="GLTF/Animations/Rhino_Idle.gltf"></a-asset-item>
+<a-asset-item id="Rhino-dance" src="GLTF/Animations/Rhino_Spin.gltf"></a-asset-item>
+<a-asset-item id="Rhino-walk" src="GLTF/Animations/Rhino_Walk.gltf"></a-asset-item>
+<a-asset-item id="Rhino-fear" src="GLTF/Animations/Rhino_Fear.gltf"></a-asset-item>
+<a-asset-item id="Rhino-death" src="GLTF/Animations/Rhino_Death.gltf"></a-asset-item>
+<a-asset-item id="Rhino-bounce" src="GLTF/Animations/Rhino_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Rhino-talk" src="GLTF/Animations/Rhino_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Seal-stand" src="GLTF/Animations/Seal_Idle.gltf"></a-asset-item>
+<a-asset-item id="Seal-dance" src="GLTF/Animations/Seal_Spin.gltf"></a-asset-item>
+<a-asset-item id="Seal-walk" src="GLTF/Animations/Seal_Walk.gltf"></a-asset-item>
+<a-asset-item id="Seal-fear" src="GLTF/Animations/Seal_Fear.gltf"></a-asset-item>
+<a-asset-item id="Seal-death" src="GLTF/Animations/Seal_Death.gltf"></a-asset-item>
+<a-asset-item id="Seal-bounce" src="GLTF/Animations/Seal_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Seal-talk" src="GLTF/Animations/Seal_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Sheep-stand" src="GLTF/Animations/Sheep_Idle.gltf"></a-asset-item>
+<a-asset-item id="Sheep-dance" src="GLTF/Animations/Sheep_Spin.gltf"></a-asset-item>
+<a-asset-item id="Sheep-walk" src="GLTF/Animations/Sheep_Walk.gltf"></a-asset-item>
+<a-asset-item id="Sheep-fear" src="GLTF/Animations/Sheep_Fear.gltf"></a-asset-item>
+<a-asset-item id="Sheep-death" src="GLTF/Animations/Sheep_Death.gltf"></a-asset-item>
+<a-asset-item id="Sheep-bounce" src="GLTF/Animations/Sheep_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Sheep-talk" src="GLTF/Animations/Sheep_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Snake-stand" src="GLTF/Animations/Snake_Idle.gltf"></a-asset-item>
+<a-asset-item id="Snake-dance" src="GLTF/Animations/Snake_Spin.gltf"></a-asset-item>
+<a-asset-item id="Snake-walk" src="GLTF/Animations/Snake_Walk.gltf"></a-asset-item>
+<a-asset-item id="Snake-fear" src="GLTF/Animations/Snake_Fear.gltf"></a-asset-item>
+<a-asset-item id="Snake-death" src="GLTF/Animations/Snake_Death.gltf"></a-asset-item>
+<a-asset-item id="Snake-bounce" src="GLTF/Animations/Snake_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Snake-talk" src="GLTF/Animations/Snake_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Turtle-stand" src="GLTF/Animations/Tortoise_Idle.gltf"></a-asset-item>
+<a-asset-item id="Turtle-dance" src="GLTF/Animations/Tortoise_Spin.gltf"></a-asset-item>
+<a-asset-item id="Turtle-walk" src="GLTF/Animations/Tortoise_Walk.gltf"></a-asset-item>
+<a-asset-item id="Turtle-fear" src="GLTF/Animations/Tortoise_Fear.gltf"></a-asset-item>
+<a-asset-item id="Turtle-death" src="GLTF/Animations/Tortoise_Death.gltf"></a-asset-item>
+<a-asset-item id="Turtle-bounce" src="GLTF/Animations/Tortoise_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Turtle-talk" src="GLTF/Animations/Tortoise_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Walrus-stand" src="GLTF/Animations/Walrus_Idle.gltf"></a-asset-item>
+<a-asset-item id="Walrus-dance" src="GLTF/Animations/Walrus_Spin.gltf"></a-asset-item>
+<a-asset-item id="Walrus-walk" src="GLTF/Animations/Walrus_Walk.gltf"></a-asset-item>
+<a-asset-item id="Walrus-fear" src="GLTF/Animations/Walrus_Fear.gltf"></a-asset-item>
+<a-asset-item id="Walrus-death" src="GLTF/Animations/Walrus_Death.gltf"></a-asset-item>
+<a-asset-item id="Walrus-bounce" src="GLTF/Animations/Walrus_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Walrus-talk" src="GLTF/Animations/Walrus_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Wolf-stand" src="GLTF/Animations/Wolf_Idle.gltf"></a-asset-item>
+<a-asset-item id="Wolf-dance" src="GLTF/Animations/Wolf_Spin.gltf"></a-asset-item>
+<a-asset-item id="Wolf-walk" src="GLTF/Animations/Wolf_Walk.gltf"></a-asset-item>
+<a-asset-item id="Wolf-fear" src="GLTF/Animations/Wolf_Fear.gltf"></a-asset-item>
+<a-asset-item id="Wolf-death" src="GLTF/Animations/Wolf_Death.gltf"></a-asset-item>
+<a-asset-item id="Wolf-bounce" src="GLTF/Animations/Wolf_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Wolf-talk" src="GLTF/Animations/Wolf_Clicked.gltf"></a-asset-item>
+<a-asset-item id="Zebra-stand" src="GLTF/Animations/Zebra_Idle.gltf"></a-asset-item>
+<a-asset-item id="Zebra-dance" src="GLTF/Animations/Zebra_Spin.gltf"></a-asset-item>
+<a-asset-item id="Zebra-walk" src="GLTF/Animations/Zebra_Walk.gltf"></a-asset-item>
+<a-asset-item id="Zebra-fear" src="GLTF/Animations/Zebra_Fear.gltf"></a-asset-item>
+<a-asset-item id="Zebra-death" src="GLTF/Animations/Zebra_Death.gltf"></a-asset-item>
+<a-asset-item id="Zebra-bounce" src="GLTF/Animations/Zebra_Bounce.gltf"></a-asset-item>
+<a-asset-item id="Zebra-talk" src="GLTF/Animations/Zebra_Clicked.gltf"></a-asset-item>
+
+  			</a-assets>
+  			
+
+  			
+  	<a-curve id="track1">
+      <a-curve-point position="-2 0 1"></a-curve-point>
+      <a-curve-point position=" 2 0 1"></a-curve-point>
+      <a-curve-point position="-2 0 1"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="track2">
+      <a-curve-point position="-1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 0.1 1"></a-curve-point>
+      <a-curve-point position=" 1 0 -1"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -1"></a-curve-point>
+      <a-curve-point position="-1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 .1 -1"></a-curve-point>
+      <a-curve-point position="-1 0 -1"></a-curve-point>
+      <a-curve-point position="-1 0 1"></a-curve-point>
+    
+    <a-curve-point position="-.7 0 .7"></a-curve-point>
+      <a-curve-point position=" .7 0.1 .7"></a-curve-point>
+      <a-curve-point position=" .7 0 -.7"></a-curve-point>
+      <a-curve-point position="-.7 -0.1 -.7"></a-curve-point>
+      <a-curve-point position="-.7 0 .7"></a-curve-point>
+      <a-curve-point position=" .7 0 .7"></a-curve-point>
+      <a-curve-point position=" .7 .1 -.7"></a-curve-point>
+      <a-curve-point position="-.7 0 -.7"></a-curve-point>
+      <a-curve-point position="-.7 0 .7"></a-curve-point>
+      
+            <a-curve-point position="-1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 0.1 1"></a-curve-point>
+      <a-curve-point position=" 1 0 -1"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -1"></a-curve-point>
+      <a-curve-point position="-1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 0 1"></a-curve-point>
+      <a-curve-point position=" 1 .1 -1"></a-curve-point>
+      <a-curve-point position="-1 0 -1"></a-curve-point>
+      <a-curve-point position="-1 0 1"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="track3">
+      <a-curve-point position=" .1 0 .1"></a-curve-point>
+      <a-curve-point position=" .3 0 .3"></a-curve-point>
+      <a-curve-point position=" .5 -.1 .6"></a-curve-point>
+      <a-curve-point position=" .0 0 .8"></a-curve-point>
+      <a-curve-point position=" -.3 0 .6"></a-curve-point>
+      <a-curve-point position=" .1 0 -.2"></a-curve-point>
+      <a-curve-point position=" .3 -.1 -.5"></a-curve-point>
+      <a-curve-point position=" .5 0 0"></a-curve-point>
+      <a-curve-point position=" .8 0 .3"></a-curve-point>
+      <a-curve-point position=" .5 .2 .5"></a-curve-point>
+      <a-curve-point position=" .3 0 .8"></a-curve-point>
+      <a-curve-point position=" -.2 -.1 .6"></a-curve-point>
+      <a-curve-point position=" -.5 0 .5"></a-curve-point>
+      <a-curve-point position=" -.1 0 .2"></a-curve-point>
+      <a-curve-point position=" .1 0 .1"></a-curve-point>
+      <a-curve-point position=" .3 0 .3"></a-curve-point>
+      <a-curve-point position=" .5 0.1 .6"></a-curve-point>
+      <a-curve-point position=" .0 0 .8"></a-curve-point>
+      <a-curve-point position=" .0 0 .5"></a-curve-point>
+      <a-curve-point position=" .3 0 .3"></a-curve-point>
+    </a-curve>
+    
+    
+    
+    <a-curve id="track4">
+      <a-curve-point position="0 0 0"></a-curve-point>
+	  <a-curve-point position="-2 0 -1"></a-curve-point>
+      <a-curve-point position="1 0 1"></a-curve-point>
+      <a-curve-point position="0 0 0"></a-curve-point>
+    </a-curve>
+    
+    
+     <a-curve id="track5">
+      <a-curve-point position=" -.1 0 -.1"></a-curve-point>
+      <a-curve-point position=" -.3 0 -.3"></a-curve-point>
+      <a-curve-point position=" -.5 -.1 -.6"></a-curve-point>
+      <a-curve-point position=" -.0 0 -.8"></a-curve-point>
+      <a-curve-point position=" .3 0 -.6"></a-curve-point>
+      <a-curve-point position=" -.1 0 .2"></a-curve-point>
+      <a-curve-point position=" -.3 -.1 .5"></a-curve-point>
+      <a-curve-point position=" -.5 0 0"></a-curve-point>
+      <a-curve-point position=" -.8 0 -.3"></a-curve-point>
+      <a-curve-point position=" -.5 .2 -.5"></a-curve-point>
+      <a-curve-point position=" -.3 0 -.8"></a-curve-point>
+      <a-curve-point position=" .2 -.1 .6"></a-curve-point>
+      <a-curve-point position=" .5 0 -.5"></a-curve-point>
+      <a-curve-point position=" .1 0 -.2"></a-curve-point>
+      <a-curve-point position=" -.1 0 -.1"></a-curve-point>
+      <a-curve-point position=" -.3 0 -.3"></a-curve-point>
+      <a-curve-point position=" -.5 0.1 -.6"></a-curve-point>
+      <a-curve-point position=" .0 0 -.8"></a-curve-point>
+      <a-curve-point position=" .0 0 -.5"></a-curve-point>
+      <a-curve-point position=" -.3 0 -.3"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="track6">
+      <a-curve-point position="-2 0.1 -.0"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -.1"></a-curve-point>
+      <a-curve-point position=" 0 0.1 -.2"></a-curve-point>
+      <a-curve-point position=" 1 0 -.1"></a-curve-point>
+      <a-curve-point position=" 2 0.2 0"></a-curve-point>
+      <a-curve-point position=" 1 -0.1 .1"></a-curve-point>
+      <a-curve-point position=" 0 0 .2"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -.1"></a-curve-point>
+      <a-curve-point position="-2 0.1  0"></a-curve-point>
+      <a-curve-point position="-1 -0.1 .1"></a-curve-point>
+      <a-curve-point position=" 0 0.1 -.1"></a-curve-point>
+      <a-curve-point position=" 1 0 -.1"></a-curve-point>
+      <a-curve-point position=" 2 0.2 0"></a-curve-point>
+      <a-curve-point position=" 1 -0.1 .1"></a-curve-point>
+      <a-curve-point position=" 0 0 .2"></a-curve-point>
+      <a-curve-point position="-1 -0.1 -.1"></a-curve-point>
+      <a-curve-point position="-2 0.1  0"></a-curve-point>
+      <a-curve-point position="-1 -0.1 .1"></a-curve-point>
+    </a-curve>
+    
+    <!-->Camera Track<--!>
+    
+    <a-curve id="camera_track0"><!-->3000<--!>
+      <a-curve-point position="0 0 4"></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+ 	
+ 	<a-curve id="camera_track1"><!-->3000<--!>
+      <a-curve-point position="0 0 2"></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track2"><!-->3000<--!>
+      <a-curve-point position="0 0 0"></a-curve-point>
+      <a-curve-point position="1 0 0"></a-curve-point>
+      <a-curve-point position="1 0 4"></a-curve-point>
+    </a-curve>
+    
+     <a-curve id="camera_track3"><!-->1000<--!>
+      <a-curve-point position="1 0 0"></a-curve-point>
+      <a-curve-point position="0 0 1"></a-curve-point>
+      <a-curve-point position="1 0 2"></a-curve-point>
+      <a-curve-point position="1 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track4"><!-->3000<--!>
+      <a-curve-point position="1 0 1.5 "></a-curve-point>
+      <a-curve-point position="0 0 2 "></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    
+    <a-curve id="camera_track5"><!-->3000<--!>
+      <a-curve-point position="0 .5 1 "></a-curve-point>
+      <a-curve-point position="0 0 3 "></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track6"><!-->3000<--!>
+      <a-curve-point position="2 -1 1 "></a-curve-point>
+      <a-curve-point position="0 0 2 "></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track7"><!-->3000<--!>
+      <a-curve-point position="0 -1 1 "></a-curve-point>
+      <a-curve-point position="0 0 2 "></a-curve-point>
+      <a-curve-point position="0 0 4"></a-curve-point>
+    </a-curve>
+    
+    <a-curve id="camera_track8"><!-->3000<--!>
+      <a-curve-point position="0 -2 0 "></a-curve-point>
+      <a-curve-point position="1 1 4 "></a-curve-point>
+      <a-curve-point position="1 1 5"></a-curve-point>
+    </a-curve>
+    
+    
+     		
+     		<!--<a-entity rotation="90 0 0" gltf-model="#Rabbit-walk" animation-mixer="loop: loop" id="bluebox" position="-1 0.5 -3" rotation="0 0 0"></a-entity>!-->
+  		
+ 		 	<!-- <a-entity rotation="90 0 0" gltf-model="#Seal-dance" animation-mixer="loop: once"\>
+				<a-animation attribute='position' to='.05 1 1' direction='alternate' dur='1000' repeat='indefinite' easing='linear'></a-animation>
+ 		 	</a-entity> --!>
+ 		 	
+ 		 
+ 		 	
+ 		 	
+			<!--ground--!>
+			<a-plane rotation="-90 0 0" width="100" height="100" color="#7BC8A4"></a-plane>
+			<a-sky id="sky_object" rotation="0 -90 0" src="https://www.sortiraparis.com/images/80/83517/577986-visuel-paris-velo-quai-2.jpg"></a-sky>
+			
+			<!--Camera--!>
+			<a-entity id="cam_object" position="0 0 4" alongpath="curve: #camera_track0; loop: false; rotate: true; dur: 2000;">
+				<a-camera >
+				</a-camera>
+    		</a-entity>
+    
+			
+			</a-scene>
+ 	
+ 	
+    	</div>
+    	<div class="card" style=" margin-top: -20px;">
+ 			 <div class="card-action" style=" margin-top: 20px;">
+              		<h5 class="header center black-text" id="current_line"> </h5>
+              </div>
+              
+              <div class="progress" id="progress" style="display: none; bottom: 0px;padding-bottom: 0px; margin-bottom: 0px;margin-top: 0px;">
+      				<div class="indeterminate"></div>
+  			  </div>
+  		</div>		
+
+
+<!--  Scripts-->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="js/materialize.js"></script>
+<script>
+
+
+
+
+	$("#progress").hide();	
+	var avaliable_animals = ["ArcticFox","Buffalo","Cat","Cheetah","Chick","Cow","Crow","Dog","Donkey","Dove","Duck", "Eagle","Elephant","Flamingo", "Fox","Gazelle", "Goldfish","Hen","Hippo","Hog","Hyena", "Mice", "Ostrich", "Owl", "Ox", "Parrot", "Penguin", "Pig", "Pigeon", "PolarBear","Rabbit","Raccoon","Reindeer","Rhino","Seal", "Sheep", "Snake", "Turtle", "Walrus","Wolf","Zebra" ];
+  	var avaliable_expression = ["stand", "dance", "walk", "fear", "death", "bounce", "talk", "sleep"];
+  		 	
+	var upload_button = document.getElementById('upload-button');
+	var clear_button = document.getElementById('clear-object');
+	var add_button = document.getElementById('add-object');
+	var add_animation_button = document.getElementById('add-animation');
+	var cam_animation_button = document.getElementById('cam-animation');
+	var audio_button = document.getElementById('audio-onoff');
+	var input_text;
+	var recently_created_object;
+	var id_count = 0;
+	//console.log("id_count-->" + id_count);
+	var object_id;
+	var audio_status = 1; //audio_volume
+	//console.log("type is " + typeof object_id);
+	
+	upload_button.addEventListener('click', function() {
+		input_text = document.getElementById('databox');
+		document.getElementById("upload_status").innerHTML = "Magic is happening";
+		$("#progress").show();
+		//console.log(input_text.value);
+		init_speech(input_text.value);
+	});
+	
+	clear_button.addEventListener('click', function() {
+		remove_all_object();
+		console.log("clear");	
+	});
+	
+	add_button.addEventListener('click', function() {
+		add_random_animal();
+		console.log("add object");	
+	});
+	
+	add_animation_button.addEventListener('click', function() {
+		add_animation(recently_created_object);
+		console.log("add animation");	
+	});
+	
+	cam_animation_button.addEventListener('click', function() {
+		console.log("cam animation");
+		scene_animtion ();	
+	});
+	
+	
+	audio_button.addEventListener('click', function() {
+		console.log("audio animation");
+		if (audio_status == 0)
+			{ 
+			document.getElementById("audio_status_display").innerHTML = "Audio On";
+			audio_status = 1; 
+			}
+		else if (audio_status == 1)
+			{
+			document.getElementById("audio_status_display").innerHTML = "Audio Off";
+			 audio_status = 0;
+			}
+		
+	});
+	
+	
+	
+//////////////////////////Speech 
+
+function speak( text, onend ) {
+  window.speechSynthesis.cancel();
+  var msg = new SpeechSynthesisUtterance( text );
+  msg.text = text;
+  
+  // Set the attributes.
+	msg.volume = audio_status;
+	msg.rate = .8;
+	msg.pitch = 1;
+  // If a voice has been selected, find the voice and set the
+  // utterance instance's voice attribute.
+	
+	msg.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == "Google UK English Male"; })[0];
+  
+  
+  
+  window.speechSynthesis.speak( msg );
+  function _wait() {
+    if ( ! window.speechSynthesis.speaking ) {
+      onend();
+      return;
+    }
+    window.setTimeout( _wait, 1000 );
+  }
+  _wait();
+}
+
+
+var phrase_count = 0;
+var phrase_total = 0;
+var splitted_text =""
+
+function init_speech(input_text){
+	phrase_count = 0;
+	splitted_text = input_text.split(".");
+	phrase_total = splitted_text.length;
+	console.log(splitted_text);
+	looptosay();
+}
+
+
+function looptosay() {
+  var tosay  =  splitted_text[phrase_count];
+  document.getElementById("current_line").innerHTML = tosay;
+  //console.log(tosay);
+  
+//scene_happening!  
+ remove_all_object();
+  scene_animtion ();
+  nlp_process(tosay);
+  
+  
+  speak(tosay, function() { 
+	  if (phrase_count < phrase_total-1){
+	  	phrase_count = phrase_count + 1;
+		looptosay();
+	  }
+	  //Visualization is finished
+	  else{$(
+	  "#progress").hide();
+	  document.getElementById("upload_status").innerHTML = "Visualize Story";
+	  }
+   });
+}
+
+///////////////////////////Speech 
+	
+	
+	
+	
+	
+	
+
+  	var sceneEl = document.querySelector('a-scene');
+  	
+  	
+  	function scene_animtion ()
+  		{
+  		selectObject = document.querySelector("#cam_object");
+  		var cam_movement = getRndInteger(1,7);
+  		//console.log(cam_movement);
+		
+		if (cam_movement == 0)
+				{
+				selectObject.setAttribute ('alongpath', 'curve: #camera_track0; loop: false; rotate: true; dur: 1000;');
+				}
+		else if (cam_movement == 1)
+				{
+				selectObject.setAttribute ('alongpath', 'curve: #camera_track1; loop: false; rotate: true; dur: 3000;');
+				}
+		else if (cam_movement == 2)
+				{
+				selectObject.setAttribute ('alongpath', 'curve: #camera_track1; loop: false; rotate: true; dur: 1000;');
+				}
+		else if (cam_movement == 3)
+				{
+				selectObject.setAttribute ('alongpath', 'curve: #camera_track3; loop: false; rotate: true; dur: 1000;');
+				}
+		else if (cam_movement == 4)
+				{
+				selectObject.setAttribute ('alongpath', 'curve: #camera_track4; loop: false; rotate: true; dur: 2000;');
+				}
+		else if (cam_movement == 5)
+				{
+				selectObject.setAttribute ('alongpath', 'curve: #camera_track5; loop: false; rotate: true; dur: 1000;');
+				}
+		else if (cam_movement == 6)
+				{
+				selectObject.setAttribute ('alongpath', 'curve: #camera_track7; loop: false; rotate: true; dur:1000;');
+				}
+		else if (cam_movement == 7)
+				{
+				selectObject.setAttribute ('alongpath', 'curve: #camera_track8; loop: false; rotate: true; dur: 1000;');
+				}	
+  		}
+  	
+  	function add_random_animal()
+  		{
+  		var select_animal = avaliable_animals [Math.floor(Math.random() * (avaliable_animals.length - 1) ) + 1];
+  		var select_expression = avaliable_expression [Math.floor(Math.random() * (avaliable_expression.length - 1) ) + 1];
+  		recently_created_object = '#' + select_animal + "-" + select_expression;
+  		//console.log(recently_created_object);
+  		add_entity (recently_created_object, select_expression);
+  		
+  		}
+  	//add_random_animal();
+  	
+  	
+  	
+  	function generate(animal, mood)
+  		{
+  		 	var select_animal ="";
+  		 	var a_maximum_similarity = 0;
+  		 	
+  		 	for (var i = 0; i < avaliable_animals.length; i++) 
+  		 		{
+    			var a_similarity = Word2VecUtils.findSimilarity(animal, avaliable_animals[i].toLowerCase());
+    			if (a_similarity > a_maximum_similarity)
+    				{
+    				a_maximum_similarity = a_similarity;
+    				select_animal = avaliable_animals[i];
+    				//console.log(avaliable_animals[i], similarity);
+    				}
+    				
+				}
+				//console.log("select_animal -->" + select_animal);
+  		 
+  		 	
+  		 	var select_expression ="";
+  			var e_maximum_similarity = 0;	
+  		 	for (var i = 0; i < avaliable_expression.length; i++) 
+  		 		{
+    			var e_similarity = Word2VecUtils.findSimilarity(mood, avaliable_expression[i]);
+    			if (e_similarity > e_maximum_similarity)
+    				{
+    				e_maximum_similarity = e_similarity;
+    				select_expression = avaliable_expression[i];
+    				//console.log(mood[i], e_similarity);
+    				}
+    				
+				}
+				console.log("avaliable_expression -->" + select_expression);
+				if (select_expression == "sleep"){select_expression = "death";}
+				
+				
+  		 		
+  		 		recently_created_object = '#' + select_animal + "-" + select_expression;
+  		 		//console.log(recently_created_object);
+  		 		add_entity (recently_created_object, select_expression);
+  		 		
+
+  		}
+
+  		//generate("rabbit", "sleep");
+  		
+  		
+  	function generate_object_id()
+  		{
+  		id_count = id_count + 1;
+  		object_id = "id" +  String(id_count);
+  		//console.log("object_id -->" + object_id);
+  		}	
+  		
+  		//generate_object_id();
+
+	function add_entity(name, expression)
+		{
+		
+		var newEl = document.createElement('a-entity');
+    	newEl.setAttribute('gltf-model', name);
+    	sceneEl.appendChild(newEl);
+		var x = Math.random()*7 - 3;
+		var rotation = "0 0 0";
+    	var position = String (x) + "0 0";
+      	newEl.setAttribute('position', position);
+      	generate_object_id();
+    	newEl.setAttribute('id', object_id);
+		newEl.setAttribute('rotation', "0 0 0");
+		
+		if (expression == "death")
+			{
+			//console.log(expression);
+			newEl.setAttribute('animation-mixer', 'loop: once; clampWhenFinished: true');
+			}
+		else{
+      		newEl.setAttribute('animation-mixer', '');
+      		}
+      		
+      	add_animation(expression);
+      	
+		}
+	
+	function remove_all_object()
+		{
+		for (var i = id_count; i> 0; i--)
+			{
+			var remove_object_id = "id" +  String(i);
+			//console.log("remove_object_id" + remove_object_id);
+			previousObject = document.querySelector("#"+remove_object_id);
+			if (previousObject != null){
+        	previousObject.parentNode.removeChild(previousObject);
+        	}
+			}
+		}
+	
+	function remove_object()
+		{
+        previousObject = document.querySelector("#birdy");
+        previousObject.parentNode.removeChild(previousObject);
+    
+		}
+	function add_animation(expression)
+		{
+		
+		selectObject = document.querySelector("#"+object_id);
+		
+		if (expression =="death"){
+			selectObject.setAttribute ('rotation', '0, 90, 0');
+		}
+		else if (expression =="stand"){
+			selectObject.setAttribute ('rotation', '0, 0, 0');
+		}
+		else{
+		var type = getRndInteger(1,6);
+		if (type == 0)
+				{
+			
+					var x = Math.random()*7 - 3;
+					var position = String (x) + "0 0";
+					//previousObject.setAttribute('rotation', position);
+					var a = document.createElement("a-animation");
+					a.setAttribute('attribute','rotation');
+					//console.log(selectObject.position);
+			
+					a.setAttribute('to', '120 120 0');
+					a.setAttribute('direction', 'alternate');
+					a.setAttribute('dur', '1000');
+					a.setAttribute('repeat', 'indefinite');
+					a.setAttribute('easing', 'linear');
+					selectObject.append(a);
+					}
+				else if (type == 1)
+					{
+					selectObject.setAttribute ('alongpath', 'curve: #track1; loop: true; rotate: true; dur: 8000;');
+					}
+				else if (type == 2)
+					{
+					selectObject.setAttribute ('alongpath', 'curve: #track2; loop: true; rotate: true; dur: 38000;');
+					}
+				else if (type == 3)
+					{
+					selectObject.setAttribute ('alongpath', 'curve: #track3; loop: true; rotate: true; dur: 12000;');
+					}
+				else if (type == 4)
+					{
+					selectObject.setAttribute ('alongpath', 'curve: #track4; loop: true; rotate: true; dur: 8000;');
+					}
+				else if (type == 5)
+					{
+					selectObject.setAttribute ('alongpath', 'curve: #track5; loop: true; rotate: true; dur: 10000;');
+					}
+				else if (type == 6)
+					{
+					selectObject.setAttribute ('alongpath', 'curve: #track6; loop: true; rotate: true; dur: 8000;');
+					}
+				}
+			
+    
+		}
+		
+	function getRndInteger(min, max) {
+  		return Math.floor(Math.random() * (max - min + 1) ) + min;
+	}	
+	
+	function find_background(location)
+		{
+		
+		var keyword = location;
+		var url = "https://www.googleapis.com/customsearch/v1?key= AIzaSyA4aOIGeiNo_8v9aKHhIJH7AOKSHXFlRTA &cx=005124428384360536924:rstfldysumw&q="+keyword+"&searchType=image&safe=high";
+		var jqxhr = $.getJSON(url, function() {
+			//console.log("success");
+		  }).done(function(data) {
+			  var random = getRndInteger(0, 4);
+			  var item = data.items[random];
+	  			  //console.log( item.link );
+			  	sky = document.querySelector("#sky_object");
+				sky.setAttribute('src', item.link );
+						 
+			
+		  }).fail(function(data) {
+			console.log("error");
+		  });
+
+					
+					
+
+						
+		}
+		find_background("gray");
+  		
+</script>
+	
+	
+  
+
+<div class="hiddendiv common" style="font-size: 30px; font-family: Roboto, sans-serif; line-height: 45px; width: 947px;">Once upon a time...<br></div><div class="drag-target" style="left: 0px; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+</div></div></body></html>

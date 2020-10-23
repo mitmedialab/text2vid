@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1> Testing sentiment Analysis </h1>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+
+function entity_recognition(input_text){
+    var APIKEY = "AIzaSyA4aOIGeiNo_8v9aKHhIJH7AOKSHXFlRTA";
+
+   $.ajax({
+    type        : "POST",
+    url         : "https://language.googleapis.com/v1/documents:analyzeEntitySentiment?key="+ APIKEY, 
+    contentType : "application/json; charset=utf-8",
+    data        : 
+                    JSON.stringify({
+                        "document": {
+                            "type": "PLAIN_TEXT",
+                            "language": "en",
+                            "content": input_text
+
+                        },
+                        "encodingType": "UTF8"}),
+    success     : function(_result){ 
+
+        if (_result) { 
+        	 unpack_entity(_result);
+            //console.log(_result);
+        } else {
+            alert('ERROR');
+        }
+    },
+
+    error       : function(_result){
+
+    }
+});
+}
+
+
+function sentiment_recognition(input_text){
+    var APIKEY = "AIzaSyA4aOIGeiNo_8v9aKHhIJH7AOKSHXFlRTA";
+
+   $.ajax({
+    type        : "POST",
+    url         : "https://language.googleapis.com/v1/documents:analyzeSentiment?key="+ APIKEY, 
+    contentType : "application/json; charset=utf-8",
+    data        : 
+                    JSON.stringify({
+                        "document": {
+                            "type": "PLAIN_TEXT",
+                            "language": "en",
+                            "content": input_text
+
+                        },
+                        "encodingType": "UTF8"}),
+    success     : function(_result){ 
+
+        if (_result) { 
+        	unpack_sentiment(_result);
+            //console.log(_result);
+        } else {
+            alert('ERROR');
+        }
+    },
+
+    error       : function(_result){
+
+    }
+});
+}
+
+function syntax_recognition(input_text){
+    var APIKEY = "AIzaSyA4aOIGeiNo_8v9aKHhIJH7AOKSHXFlRTA";
+
+   $.ajax({
+    type        : "POST",
+    url         : "https://language.googleapis.com/v1/documents:analyzeSyntax?key="+ APIKEY, 
+    contentType : "application/json; charset=utf-8",
+    data        : 
+                    JSON.stringify({
+                        "document": {
+                            "type": "PLAIN_TEXT",
+                            "language": "en",
+                            "content": input_text
+
+                        },
+                        "encodingType": "UTF8"}),
+    success     : function(_result){ 
+
+        if (_result) { 
+        	unpack_syntax(_result);
+            //console.log(_result);
+        } else {
+            alert('ERROR');
+        }
+    },
+
+    error       : function(_result){
+
+    }
+});
+}
+
+function unpack_entity(json)
+{
+	//console.log("unpack");
+	//console.log(json);
+	for(var i = 0; i < json.entities.length; i++) 
+	{
+    	var obj = json.entities[i];
+		//console.log(obj);
+		if (obj.type == "LOCATION")
+			{
+			console.log("Location = " + obj.name);
+			}
+	}
+   
+}
+
+function unpack_sentiment(json)
+{
+	//console.log("unpack");
+	//console.log(json);
+	var sentiment_value = json.documentSentiment.score;
+	console.log("sentiment = " + sentiment_value);
+		
+	}
+
+function unpack_syntax(json)
+{	
+	let scene_object = [];
+	console.log(json);
+	for(var i = 0; i < json.tokens.length; i++) 
+	{
+    	var obj = json.tokens[i];
+		//console.log(obj);
+		if (obj.partOfSpeech.tag == "NOUN")
+			{
+				//console.log(obj.text.content + ", order : "+  i);
+				var noun_object = {order: i, object: obj.text.content, adj: "",v:""};
+				scene_object.push(noun_object);   
+			}
+	
+	}
+	for(var i = 0; i < json.tokens.length; i++) 
+			{	
+				var obj = json.tokens[i];
+				for(var  n = 0; n < scene_object.length; n++)
+				{	
+					//console.log("obj.dependencyEdge.headTokenIndex:" + obj.dependencyEdge.headTokenIndex + ", scene_object.order: " + scene_object[n].order);
+					if (obj.dependencyEdge.headTokenIndex == scene_object[n].order)
+						{
+							if (obj.partOfSpeech.tag == "ADJ"){scene_object[n].adj = obj.text.content;}
+							else if (obj.partOfSpeech.tag == "VERB"){scene_object[n].v = obj.text.content;}
+							
+						console.log("-->" + obj.text.content);
+						} 
+				
+				//console.log("-->" + json.tokens[i].text.content);
+				}
+					
+			}
+	text_to_object(scene_object);
+	console.log(scene_object);		
+   
+}	
+
+function text_to_object(scene_object)
+	{
+	for(var  n = 0; n < scene_object.length; n++)
+			{
+			console.log(scene_object[n]);
+			}
+
+	}
+
+
+
+function text(input_text){ 
+entity_recognition(input_text);
+sentiment_recognition(input_text);
+syntax_recognition(input_text);
+}
+
+text("once upon a time in a forest, there is  a sad bird that fly in the sky.");
+
+
+</script>
+</body>
+</html>

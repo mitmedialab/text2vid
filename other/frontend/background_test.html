@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title></title>
+    
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.6.7.min.js"></script>
+  <script src="https://rawgit.com/aframevr/aframe/master/dist/aframe-master.min.js"></script>
+  <script src="https://unpkg.com/aframe-text-geometry-component@0.5.1/dist/aframe-text-geometry-component.min.js"></script>
+  <script src="https://rawgit.com/protyze/aframe-curve-component/master/dist/aframe-curve-component.min.js"></script>
+  <script src="https://rawgit.com/protyze/aframe-alongpath-component/master/dist/aframe-alongpath-component.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+  
+  <script src="js/word2vec/data/wordvecs10000.js"></script>
+  <script src="js/word2vec/assets/js/word2vecutils.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript">
+
+    $(document).ready(function(){
+			
+		var string1 = "hello dinosaur"
+		var string2 = "yes sir"
+		var getURL = "https://text2vid-server.herokuapp.com/centers/"+ string1 + "/" + string2
+		
+        $.getJSON(getURL,
+        function(data) {
+            console.log(data)
+
+        });
+
+    });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

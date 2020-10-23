@@ -1,0 +1,66 @@
+<html>
+<body>
+
+<h1> Text2speech </h1>
+
+<button onclick="init()">Greet…</button>
+
+<script>
+function speak( text, onend ) {
+  window.speechSynthesis.cancel();
+  var msg = new SpeechSynthesisUtterance( text );
+  msg.text = text;
+  
+  // Set the attributes.
+	msg.volume =1;
+	msg.rate = .8;
+	msg.pitch = 1;
+  // If a voice has been selected, find the voice and set the
+  // utterance instance's voice attribute.
+	
+	msg.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == "Google UK English Male"; })[0];
+  
+  
+  
+  window.speechSynthesis.speak( msg );
+  function _wait() {
+    if ( ! window.speechSynthesis.speaking ) {
+      onend();
+      return;
+    }
+    window.setTimeout( _wait, 1000 );
+  }
+  _wait();
+}
+
+
+var phrase_count = 0;
+var phrase_total = 0;
+var input_text = "HELLO HOW IS EVERYTHING GOING. I really love you. What should we do next? Why are we here. No way.";
+var splitted_text =""
+
+function init(){
+	phrase_count = 0;
+	splitted_text = input_text.split(".");
+	phrase_total = splitted_text.length;
+	console.log(splitted_text);
+	looptosay();
+}
+
+
+function looptosay() {
+  var tosay  =  splitted_text[phrase_count];
+  console.log(tosay);
+  speak(tosay, function() { 
+	  if (phrase_count < phrase_total-1){
+	  	phrase_count = phrase_count + 1;
+		looptosay();
+	  }
+   });
+}
+
+	
+	
+</script>
+</body>
+</html>
